@@ -1,0 +1,7 @@
+export interface IMeirUpdatesProps {
+  description: string;
+  isDarkTheme: boolean;
+  environmentMessage: string;
+  hasTeamsContext: boolean;
+  userDisplayName: string;
+}

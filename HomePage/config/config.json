@@ -1,0 +1,72 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "meir-updates-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirUpdates/MeirUpdatesWebPart.js",
+          "manifest": "./src/webparts/meirUpdates/MeirUpdatesWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-scripts-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirScripts/MeirScriptsWebPart.js",
+          "manifest": "./src/webparts/meirScripts/MeirScriptsWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-conversation-scripts-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirConversationScripts/MeirConversationScriptsWebPart.js",
+          "manifest": "./src/webparts/meirConversationScripts/MeirConversationScriptsWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-brands-comparation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirBrandsComparation/MeirBrandsComparationWebPart.js",
+          "manifest": "./src/webparts/meirBrandsComparation/MeirBrandsComparationWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-show-rooms-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirShowRooms/MeirShowRoomsWebPart.js",
+          "manifest": "./src/webparts/meirShowRooms/MeirShowRoomsWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-brands-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirBrands/MeirBrandsWebPart.js",
+          "manifest": "./src/webparts/meirBrands/MeirBrandsWebPart.manifest.json"
+        }
+      ]
+    },
+    "meir-faq-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/meirFaq/MeirFaqWebPart.js",
+          "manifest": "./src/webparts/meirFaq/MeirFaqWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MeirUpdatesWebPartStrings": "lib/webparts/meirUpdates/loc/{locale}.js",
+    "MeirScriptsWebPartStrings": "lib/webparts/meirScripts/loc/{locale}.js",
+    "MeirConversationScriptsWebPartStrings": "lib/webparts/meirConversationScripts/loc/{locale}.js",
+    "MeirBrandsComparationWebPartStrings": "lib/webparts/meirBrandsComparation/loc/{locale}.js",
+    "MeirShowRoomsWebPartStrings": "lib/webparts/meirShowRooms/loc/{locale}.js",
+    "MeirBrandsWebPartStrings": "lib/webparts/meirBrands/loc/{locale}.js",
+    "MeirFaqWebPartStrings": "lib/webparts/meirFaq/loc/{locale}.js"
+  }
+}

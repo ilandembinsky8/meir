@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "14.17.4",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "version": "1.16.0-rc.0",
+    "libraryName": "meir-hp",
+    "libraryId": "477760ae-267a-466a-bd33-14afbfb1a39e",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "meirHP",
+    "solutionShortDescription": "meirHP description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

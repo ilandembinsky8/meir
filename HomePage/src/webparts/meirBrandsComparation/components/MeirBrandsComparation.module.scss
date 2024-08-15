@@ -1,0 +1,80 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+.meirBrandsComparation {
+    .updateArea {
+        float: right;
+        width: 100%;
+        background-color: #E4EAEB;
+        margin-top: 50px;
+    }
+    .links {
+        float: left;
+    }
+    .linksList {
+        float: right;
+    }
+    .linksList .oneItem {
+        float: right;
+        width: 95%;
+        height: 173px;
+        background-color: white;
+        border-radius: 5px;
+        margin-bottom: 25px;
+        margin-right: 22px;
+    }
+    .linksList .oneItem .imageArea {
+        float: right;
+        width: 24%;
+        height: 100%;
+        background-image: linear-gradient(to left, #0493FA, #000098);
+        border-radius: 0px 5px 5px 0px;
+    }
+    .linksList .oneItem .imageArea .theImage {
+        float: right;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: center center
+    }
+    .linksList .oneItem .data {
+        float: right;
+        width: 70%;
+        height: 100%;
+        padding: 10px;
+    }
+    .linksList .oneItem .data .title {
+        float: right;
+        width: 100%;
+        font-family: Assistant-Bold;
+        font-size: 1.33rem
+    }
+    .linksList .oneItem .data .text {
+        float: right;
+        width: 100%;
+        margin-top: 10px
+    }
+    //
+    .link {
+        color: #0078d4;
+        /* Link color */
+        text-decoration: none;
+        /* Remove underline */
+        display: block;
+        /* Make each link occupy a full line */
+        margin-bottom: 6px;
+        /* Space between links */
+        font-weight: 500;
+        /* Slightly bold */
+        transition: color 0.3s ease;
+        /* Smooth transition on hover */
+        &:hover {
+            color: #005a9e;
+            /* Darker color on hover */
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+        &:last-child {
+            margin-bottom: 0;
+            /* Remove margin from the last link */
+        }
+    }
+}

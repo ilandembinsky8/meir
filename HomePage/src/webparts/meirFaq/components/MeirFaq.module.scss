@@ -1,0 +1,101 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+.meirFaq {
+    .bottomSection {
+        float: right;
+        width: 100%;
+        background-color: #E4EAEB;
+        padding: 8px;
+    }
+    .bottomSection .qa {
+        float: right;
+        width: 50%;
+    }
+    .bottomSection .titleArea {
+        float: right;
+        width: 100%;
+        height: 40px;
+        margin-top: 20px;
+    }
+    .bottomSection .titleArea .theTitle {
+        float: right;
+        font-family: Assistant-SemiBold;
+        font-size: 2rem;
+        color: black;
+    }
+    .bottomSection .titleArea .theFilter {
+        float: left;
+        margin-top: 0px;
+    }
+    .bottomSection .titleArea .theFilter select {
+        min-width: 300px;
+        height: 50px;
+        font-family: Assistant-Regular;
+        font-size: 1.3rem;
+        border: 0px;
+    }
+    .bottomSection .qa .oneQuestion {
+        position: relative;
+        float: right;
+        width: 100%;
+        box-shadow: 0px 0px 15px #0000001A;
+        background-color: white;
+        margin-top: 20px;
+        min-height: 69px;
+        padding: 15px;
+        padding-top: 6px;
+        padding-bottom: 0px;
+        background-image: url('/sites/Meir-Demo/SiteAssets/cut/arrow_down1.svg');
+        background-position: 5% center;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        /* Include padding in height */
+        overflow: hidden;
+        /* Hide overflowed text */
+        white-space: normal;
+        /* Allow text wrapping */
+        text-overflow: clip;
+        /* Remove ellipsis */
+    }
+    .bottomSection .qa .oneQuestion:hover::after {
+        content: attr(data-full-text);
+        position: absolute;
+        left: 0;
+        top: 100%;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 10px;
+        white-space: normal;
+        /* Allow text to wrap */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-width: 300px;
+        /* Set a maximum width for the tooltip */
+        word-wrap: break-word;
+        /* Break long words */
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s;
+    }
+    .bottomSection .qa .oneAnswer {
+        float: right;
+        width: 100%;
+        padding: 15px;
+        background-color: white;
+        display: none;
+        overflow: auto;
+        /* Allow scrolling if content overflows */
+        min-height: 70px;
+        /* Ensure minimum height */
+        box-sizing: border-box;
+        /* Include padding in height */
+    }
+    .sampleImage {
+        float: right;
+        width: 50%;
+        height: 454px;
+        background-image: url('/sites/Meir-Demo/SiteAssets/cut/sampleImage.png');
+        background-size: 90% 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}

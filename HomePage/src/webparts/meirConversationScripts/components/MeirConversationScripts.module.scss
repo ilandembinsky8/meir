@@ -1,0 +1,85 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+.meirConversationScripts {
+    .updateArea {
+        float: right;
+        width: 100%;
+        background-color: #E4EAEB;
+        margin-top: 10px;
+    }
+    .links {
+        float: left;
+    }
+    .linksList {
+        float: right;
+    }
+    .linksList .oneItem {
+        float: right;
+        width: 95%;
+        height: 173px;
+        background-color: white;
+        border-radius: 5px;
+        margin-bottom: 25px;
+        margin-right: 22px;
+    }
+    .linksList .oneItem .imageArea {
+        float: right;
+        width: 24%;
+        height: 100%;
+        background-image: linear-gradient(to left, #0493FA, #000098);
+        border-radius: 0px 5px 5px 0px;
+    }
+    .linksList .oneItem .imageArea .theImage {
+        float: right;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: center center
+    }
+    .linksList .oneItem .data {
+        float: right;
+        width: 70%;
+        height: 100%;
+        padding: 10px;
+    }
+    .linksList .oneItem .data .title {
+        float: right;
+        width: 100%;
+        font-family: Assistant-Bold;
+        font-size: 1.33rem
+    }
+    .linksList .oneItem .data .text {
+        float: right;
+        width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    ///
+    .selectBox {
+        width: 95%;
+        padding: 8px 63px;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f7f7f7;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        appearance: none;
+        /* Remove default dropdown arrow in some browsers */
+        -webkit-appearance: none;
+        /* Remove default dropdown arrow in Safari */
+        -moz-appearance: none;
+        /* Remove default dropdown arrow in Firefox */
+    }
+    .selectBox:focus {
+        border-color: #0078d4;
+        /* Change border color on focus */
+        outline: none;
+        /* Remove default focus outline */
+        box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
+        /* Add subtle shadow */
+    }
+    .selectBox option {
+        padding: 10px;
+        /* Add padding to options for better readability */
+    }
+}
