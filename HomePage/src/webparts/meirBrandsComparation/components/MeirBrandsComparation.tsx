@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirBrandsComparation.module.scss';
 import { IMeirBrandsComparationProps } from './IMeirBrandsComparationProps';
 
-const siteURL = "Meir-Demo"; //KBMCT1
+const siteURL = "KBMCT2"; //KBMCT1
 
 export default class MeirBrandsComparation extends React.Component<IMeirBrandsComparationProps, {}> {
   public render(): React.ReactElement<IMeirBrandsComparationProps> {

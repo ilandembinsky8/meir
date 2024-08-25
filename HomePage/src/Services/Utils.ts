@@ -9,7 +9,7 @@ import "@pnp/sp/items";
 
 sp.setup({
   sp: {
-    baseUrl: "https://knowedge.sharepoint.com/sites/Innovation"
+    baseUrl: "https://meir365.sharepoint.com/sites/KBMCT2"
   }
 });
 

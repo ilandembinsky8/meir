@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirBrands.module.scss';
 import { IMeirBrandsProps } from './IMeirBrandsProps';
 
-const siteURL = "Meir-Demo"; // Change this as needed
+const siteURL = "KBMCT2"; // Change this as needed
 
 const brands = [
   {

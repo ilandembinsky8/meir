@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirConversationScripts.module.scss';
 import { IMeirConversationScriptsProps } from './IMeirConversationScriptsProps';
 
-const siteURL = "Meir-Demo"; //KBMCT1
+const siteURL = "KBMCT2"; //KBMCT1
 
 export default class MeirConversationScripts extends React.Component<IMeirConversationScriptsProps, { selectedOption: string }> {
   constructor(props: IMeirConversationScriptsProps) {

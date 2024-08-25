@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirUpdates.module.scss';
 import { IMeirUpdatesProps } from './IMeirUpdatesProps';
 
-const siteURL = "Meir-Demo"; // KBMCT1
+const siteURL = "KBMCT2"; // KBMCT1
 
 interface IUpdateItem {
   id: number;

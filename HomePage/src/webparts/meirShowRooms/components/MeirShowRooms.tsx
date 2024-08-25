@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirShowRooms.module.scss';
 import { IMeirShowRoomsProps } from './IMeirShowRoomsProps';
 
-const siteURL = "Meir-Demo" //KBMCT1
+const siteURL = "KBMCT2" //KBMCT1
 
 export default class MeirShowRooms extends React.Component<IMeirShowRoomsProps, {}> {
   public render(): React.ReactElement<IMeirShowRoomsProps> {
