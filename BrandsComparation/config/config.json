@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "brands-comparation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/brandsComparation/BrandsComparationWebPart.js",
+          "manifest": "./src/webparts/brandsComparation/BrandsComparationWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "BrandsComparationWebPartStrings": "lib/webparts/brandsComparation/loc/{locale}.js"
+  }
+}
