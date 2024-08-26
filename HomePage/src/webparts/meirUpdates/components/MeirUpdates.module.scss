@@ -78,6 +78,12 @@
                     background-color: #e4eaeb !important;
                 }
             }
+            @media (min-width: 1024px) {
+                .a_a_50a7110f:not(.b_a_50a7110f).g_a_50a7110f {
+                    width: 66.6666666667%;
+                    background-color: #e4eaeb;
+                }
+            }
         }
         
         @import '~@fluentui/react/dist/sass/References.scss';

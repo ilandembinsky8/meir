@@ -77,4 +77,50 @@
             /* Remove margin from the last link */
         }
     }
+    /* Container for the tooltip */
+    .tooltipContainer {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+    }
+    /* Tooltip text */
+    .tooltipText {
+        visibility: hidden;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        /* Position above the container */
+        left: 50%;
+        transform: translateX(-50%);
+        /* Center the tooltip */
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s;
+        white-space: nowrap;
+        /* Prevent text from wrapping */
+        width: auto;
+        pointer-events: none;
+        margin-left: 73px;
+    }
+    /* Tooltip arrow */
+    .tooltipText::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        /* Position below the tooltip */
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
+    /* Show tooltip on hover */
+    .tooltipContainer:hover .tooltipText {
+        visibility: visible;
+        opacity: 1;
+    }
 }
