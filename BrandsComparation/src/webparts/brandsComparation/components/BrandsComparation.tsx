@@ -43,13 +43,31 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
         500
       );
       
-      // Update the state with the retrieved models
       this.setState({ models });
-
+      
+      const brandCodesArray = this.getBrandCodes();
+      
+      // Filter the models that match the IDs from brandCodesArray
+      const selectedModels = models.filter(model => brandCodesArray.includes(model.ID));
+  
+      // Update the state with the selected models
+      this.setState({ selectedModels }, () => {
+        // Check the checkboxes for the selected models
+        selectedModels.forEach(model => {
+          const checkbox = document.getElementById(`d${model.ID}`) as HTMLInputElement;
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        });
+      });
+  
+      console.log(brandCodesArray); 
+      debugger;
     } catch (error) {
       console.error('Error fetching items', error);
     }   
   }
+  
 
   private async GetItems(
     listName: string,
@@ -83,6 +101,17 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     }
   }
 
+  private getBrandCodes(): number[] {
+    const urlParams = new URLSearchParams(window.location.search);
+    const brandsCode = urlParams.get('BrandsCode');
+    
+    if (brandsCode) {
+      return brandsCode.split('-').map(code => parseInt(code, 10));
+    } else {
+      return [];
+    }
+  } 
+  
   private addRemoveFromCompare(modelId: number) {
     const isChecked = (document.getElementById(`d${modelId}`) as HTMLInputElement).checked;
     const selectedModel = this.state.models.find(model => model.ID === modelId);
