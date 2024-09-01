@@ -8,19 +8,6 @@ export interface IFAQState {
   currItems: any[];
 }
 
-const faqItems = [
-  { Title: "שאלה מקסימה ומאתגרת", Answer: "תשובה נהדרת", ID: 1, number_of_entries: 0, Created: "2024-10-14T00:00:00" },
-  { Title: "שאלה שניה", Answer: "תשובה שניה", ID: 2, number_of_entries: 2, Created: "2024-10-13T00:00:00" },
-  { Title: "שאלה ממש ממש ארוכה כדי לבדוק מה קורה כשיש שאלה ממש ארוכה שלא תיחתך באמצע שאלה ממש ממש ארוכה כדי לבדוק מה קורה כשיש שאלה ממש ארוכה שלא תיחתך באמצע", 
-    Answer: "תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה תשובה עוד יותר ארוכה שגם היא לא תיחתך באמצע במקרה שיש תשובה ממש ממש ארוכה ", ID: 3, number_of_entries: 1, Created: "2024-10-12T00:00:00" },
-  { Title: "3שאלה", Answer: "תשובה", ID: 4, number_of_entries: 3, Created: "2024-10-11T00:00:00" },
-  { Title: "4שאלה", Answer: "תשובה", ID: 5, number_of_entries: 4, Created: "2024-10-10T00:00:00" },
-  { Title: "3שאלה", Answer: "תשובה", ID: 6, number_of_entries: 3, Created: "2024-10-09T00:00:00" },
-  { Title: "שאלה בפופולריות 5", Answer: "תשובה", ID: 7, number_of_entries: 5, Created: "2024-10-08T00:00:00" },
-  { Title: "שאלה", Answer: "תשובה", ID: 8, number_of_entries: 3, Created: "2024-10-07T00:00:00" },
-  { Title: " שאלה פופלרית מאוד", Answer: "תשובה", ID: 9, number_of_entries: 22, Created: "2024-10-06T00:00:00" },
-];
-
 export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
 
   private _utils: Utils;
@@ -44,12 +31,29 @@ export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
     this.GetFAQ();
   }
 
-  private GetFAQ() {
-    // Initially set allItems and the currItems to the newest 5 items
-    this.setState({ 
-      allItems: faqItems,
-      currItems: this.getNewestItems(faqItems, 4)
-    });
+  private async GetFAQ() {
+
+    try {
+      const items: any[] = await this._utils.GetItems(
+        "שאלות ותשובות",
+        "Title,ID,Answer,EntriesNumber",
+        null,
+        "Title",
+        true, 
+        null, 
+        500
+      );
+    
+    
+      console.log("FAQ Items: ", items);
+      this.setState({ 
+        allItems: items,
+        currItems: this.getNewestItems(items, 4)
+      });
+    
+    } catch (error) {
+      console.error('Error fetching items', error);
+    }    
   }
 
   private getNewestItems(items: any[], count: number) {
@@ -60,7 +64,7 @@ export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
 
   private getMostPopularItems(items: any[], count: number) {
     return items
-      .sort((a, b) => b.number_of_entries - a.number_of_entries)
+      .sort((a, b) => b.EntriesNumber - a.EntriesNumber)
       .slice(0, count);
   }
 
@@ -77,22 +81,39 @@ export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
     this.setState({ currItems: sortedItems });
   }
 
+  private updateFAQItem = async (item: any) => {
+    try {
+      await this._utils.UpdateItem(
+        "שאלות ותשובות", // List name
+        item.ID, // ID of the item to update
+        { EntriesNumber: item.EntriesNumber } // Fields to update
+      );
+      console.log(`Item with ID ${item.ID} updated successfully.`);
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
+  };
+  
   private showAnswer = (item: any) => {
-    console.log(`ID: ${item.ID}, Title: ${item.Title}, Number of Entries: ${item.number_of_entries}`);
-
+    console.log(`ID: ${item.ID}, Title: ${item.Title}, Number of Entries: ${item.EntriesNumber}`);
+  
     const answerElement = document.getElementById(`p${item.ID}`);
     if (answerElement) {
       answerElement.style.display = answerElement.style.display === 'none' ? 'block' : 'none';
     }
-
+  
     // Increment the number_of_entries
-    item.number_of_entries++;
+    item.EntriesNumber++;
     this.setState((prevState) => ({
       allItems: prevState.allItems.map((currItem) =>
-        currItem.ID === item.ID ? { ...currItem, number_of_entries: item.number_of_entries } : currItem
+        currItem.ID === item.ID ? { ...currItem, EntriesNumber: item.EntriesNumber } : currItem
       ),
     }));
+  
+    // Update the item in SharePoint
+    this.updateFAQItem(item);
   };
+  
 
   public render(): React.ReactElement<IMeirFaqProps> {
     return (

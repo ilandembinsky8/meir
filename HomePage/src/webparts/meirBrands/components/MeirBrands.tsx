@@ -1,80 +1,9 @@
 import * as React from 'react';
 import styles from './MeirBrands.module.scss';
 import { IMeirBrandsProps } from './IMeirBrandsProps';
+import { Utils } from '../../../Services/Utils';
 
 const siteURL = "KBMCT2"; // Change this as needed
-
-const brands = [
-  {
-    id: "a11",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/volvo.png`,
-    hebTitle: "וולוו",
-    engTitle: "VOLVO",
-    text: "וולוו הנה אחד ממותגי הרכב המובילים, הותיקים והמוכרים בעולם כולו, החברה נוסדה בשוודיה ב 1927 ומאז חרטה על דיגלה את ערכי הבטיחות "},
-  {
-    id: "a21",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/honda_car.png`,
-    hebTitle: "הונדה מכוניות",
-    engTitle: "Honda Cars",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a31",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/honda_cycle.png`,
-    hebTitle: "הונדה אופנועים",
-    engTitle: "Honda Motorcycle",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג יבעס."
-  },
-  {
-    id: "a41",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/polestar.svg`,
-    hebTitle: "פולסטאר",
-    engTitle: "Polestar",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a51",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/linkco.png`,
-    hebTitle: "לינק אנד קו",
-    engTitle: "Link&co",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a61",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/meu.png`,
-    hebTitle: "מיו",
-    engTitle: "Meu",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a71",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/volvo.png`,
-    hebTitle: "חדש וולוו",
-    engTitle: "VOLVO",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a81",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/honda_car.png`,
-    hebTitle: "הונדה מכוניות חדש",
-    engTitle: "Honda Cars",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a91",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/honda_cycle.png`,
-    hebTitle: " חדש הונדה אופנועים",
-    engTitle: "Honda Motorcycle",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  },
-  {
-    id: "a101",
-    imageUrl: `/sites/${siteURL}/SiteAssets/cut/polestar.svg`,
-    hebTitle: " חדש פולסטאר",
-    engTitle: "Polestar",
-    text: "ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס."
-  }
-];
 
 export interface IBrandsState {
   allItems: any[];
@@ -83,10 +12,22 @@ export interface IBrandsState {
   limit: string;
 }
 
+interface IBrandItem {
+  Title: string;
+  ID: string;
+  EngTitle: string;
+  Explanation: string;
+  Picture1?: string; // Assuming Picture1 is a JSON string
+}
+
+
 export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrandsState> {
+
+  private _utils: Utils;
 
   constructor(props: IMeirBrandsProps) {
     super(props);
+    this._utils = new Utils();
     this.state = { allItems: [], currItems: [], index: 1, limit: "Prev" };
     
     this.GetBrands = this.GetBrands.bind(this);
@@ -99,11 +40,35 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
     this.GetBrands();
   }
 
-  private GetBrands() {
-    this.setState({ allItems: brands }, () => {
-      this.GetCurrentBrands(1);
-    });
+  private async GetBrands() {
+    try {
+      const items: IBrandItem[] = await this._utils.GetItems(
+        "מותגים",
+        "Title,ID,EngTitle,Explanation,Picture1",
+        null,
+        "Title",
+        true, 
+        null, 
+        100
+      );
+    
+      // Parse the Picture1 JSON string into an object or keep it null if parsing fails
+      const parsedItems = items.map((item: IBrandItem) => ({
+        ...item,
+        Picture1: item.Picture1 ? JSON.parse(item.Picture1) : null
+      }));
+    
+      console.log("Brands Items: ", parsedItems);
+      this.setState({ allItems: parsedItems }, () => {
+        this.GetCurrentBrands(1);
+      });
+    
+    } catch (error) {
+      console.error('Error fetching items', error);
+    }
   }
+  
+  
 
   private GetCurrentBrands(index: number) {
     const currItems = [];
@@ -155,21 +120,34 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
               </div>
               <div className={styles.list}>
                 {this.state.currItems.map((brand: any) => (
-                  <div className={styles.oneItem} key={brand.id}>
+                  <div className={styles.oneItem} key={brand.ID} onClick={() =>
+                    this._utils.OpenTab(
+                      `/sites/${siteURL}/SitePages/Brand.aspx?Brand=${brand.ID}`
+                    )
+                  }>
+                    {brand.Picture1 && brand.Picture1.serverRelativeUrl ? (
+                      <div
+                        id={brand.ID}
+                        className={styles.theImage}
+                        style={{ backgroundImage: `url(${brand.Picture1.serverRelativeUrl})` }}
+                        onMouseOver={() => this.hideShow(brand.ID, `${brand.ID}_data`)}
+                      ></div>
+                    ) : (
+                      <div
+                        id={brand.ID}
+                        className={styles.theImage}
+                        style={{ backgroundImage: `url('/sites/${siteURL}/SiteAssets/cut/default.svg')` }} // Fallback image
+                        onMouseOver={() => this.hideShow(brand.ID, `${brand.ID}_data`)}
+                      ></div>
+                    )}
                     <div
-                      id={brand.id}
-                      className={styles.theImage}
-                      style={{ backgroundImage: `url(${brand.imageUrl})` }}
-                      onMouseOver={() => this.hideShow(brand.id, `${brand.id}_data`)}
-                    ></div>
-                    <div
-                      id={`${brand.id}_data`}
+                      id={`${brand.ID}_data`}
                       className={styles.theData}
-                      onMouseLeave={() => this.hideShow(`${brand.id}_data`, brand.id)}
+                      onMouseLeave={() => this.hideShow(`${brand.ID}_data`, brand.ID)}
                     >
-                      <div className={styles.hebTitle}>{brand.hebTitle}</div>
-                      <div className={styles.engTitle}>{brand.engTitle}</div>
-                      <div className={styles.text}>{brand.text}</div>
+                      <div className={styles.hebTitle}>{brand.Title}</div>
+                      <div className={styles.engTitle}>{brand.EngTitle}</div>
+                      <div className={styles.text}>{this._utils.limitChars(brand.Explanation, 90)}</div>
                     </div>
                   </div>
                 ))}
@@ -181,4 +159,5 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
       </section>
     );
   }
+  
 }

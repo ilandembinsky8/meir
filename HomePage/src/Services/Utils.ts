@@ -49,6 +49,17 @@ export class Utils  {
     }
   }
   
+
+  public async UpdateItem(listName: string, itemId: number, fieldsToUpdate: { [key: string]: any }): Promise<void> {
+    try {
+      await sp.web.lists.getByTitle(listName).items.getById(itemId).update(fieldsToUpdate);
+      console.log(`Item with ID ${itemId} in list '${listName}' updated successfully.`);
+    } catch (error) {
+      console.error(`Error updating item with ID ${itemId} in list '${listName}':`, error);
+      throw error; // Re-throw the error to handle it further up the chain if needed
+    }
+  }
+  
   public limitChars(text: string, num: number) {
     if(!text || !num || text.length <= num)
         return text;
