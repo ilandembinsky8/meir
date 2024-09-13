@@ -35,8 +35,8 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     try {
       const models = await this.GetItems(
         "דגמים",
-        "ID,Title,ModelCode,ConsumerPrice,ManufacturingCountry/Title", 
-        "ManufacturingCountry",
+        "ID,Title,ModelCode,ConsumerPrice,SafetyLevel,ManufacturingCountry/Title,Brand/Title,Segment/Title,EngineType/Title,DrivingRange,AvrgFuelUsage,Power", 
+        "ManufacturingCountry,Brand,Segment,EngineType",
         "Title",
         false, 
         null,  
@@ -140,82 +140,97 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       alert('יש לבחור לפחות 2 דגמים להשוואה');
       return;
     }
-
+  
     const title = this.state.selectedModels.map(model => model.Title).join('-');
     const code = this.state.selectedModels.map(model => model.ID).join('-');
-
+  
+    // Prompt the user to enter a title
+    const userTitle = prompt('Please enter a title for the comparison:', title);
+  
+    // If the user didn't enter a title, show an alert and return
+    if (userTitle === null || userTitle.trim() === '') {
+      alert('Title cannot be empty.');
+      return;
+    }
+  
     try {
       await sp.web.lists.getByTitle('השוואה בין דגמים').items.add({
-        Title: title,
+        Title: userTitle,
         Code: code
       });
-
+  
       alert('השוואה נשמרה בהצלחה');
     } catch (error) {
       console.error('Error saving comparation', error);
       alert('Failed to save comparation.');
     }
   }
+  
 
   private EditComparations(){
     var url = "/sites/KBMCT2/Lists/ModelsComparison/view.aspx";
     window.open(url, '_blank');
   }
 
-  public render(): React.ReactElement<IBrandsComparationProps> {
-    return (
-      <section className={styles.brandsComparation}>
-        <section className={styles.updateArea}>
-          <div className={styles.innerCompare}>
-            {this.state.models.map(model => (
-              <div key={model.ID} className={styles.oneCheckbox}>
-                <input 
-                  id={`d${model.ID}`} 
-                  type="checkbox" 
-                  checked={this.state.selectedModels.some(selected => selected.ID === model.ID)}
-                  onChange={() => this.addRemoveFromCompare(model.ID)} 
-                />
-                &nbsp;<span id={`t${model.ID}`}>{model.Title}</span>
-              </div>
-            ))}
-          </div>
-          <div className={styles.innerCompare}>
-            {[...Array(this.MAX_MODELS)].map((_, index) => {
-              const num = index + 1;
-              const model = this.state.selectedModels[num - 1];
-              return (
-                <div key={`item${num}`} id={`item${num}`} className={styles.oneItem} style={{ display: model ? 'inline' : 'none' }}>
-                  {model && (
-                    <>
-                      <div id={`i${num}1`} className={styles.theTitle}>{model.Title}</div>
-                      <div className={styles.modelDetails}>
-                        <div><strong>קוד מודל:</strong> {model.ModelCode}</div>
-                        <div><strong>מחיר לצרכן:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>מותג:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>סגמנט:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>סוג מנוע:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>הספק:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>צריכת דלק ממוצעת:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>טווח נסיעה:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>רמת אבזור בטיחותי:</strong> {model.ConsumerPrice}</div>
-                        <div><strong>מדינת ייצור:</strong> {model.ManufacturingCountry.Title}</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          {this.state.selectedModels.length >= 2 && (
-            <button className={styles.saveButton} onClick={() => this.saveComparation()}>
-              שמירת השוואה
-            </button>
-          )}
-           <button className={styles.saveButton} onClick={() => this.EditComparations()}>
-              עריכת השוואות שלי
-            </button>
-        </section>
-      </section>
-    );
+  private getDisplayValue(value: any): string {
+    return value ? value : "לא הוזן";
   }
+
+public render(): React.ReactElement<IBrandsComparationProps> {
+  return (
+    <section className={styles.brandsComparation}>
+      <section className={styles.updateArea}>
+        <div className={styles.innerCompare}>
+          {this.state.models.map(model => (
+            <div key={model.ID} className={styles.oneCheckbox}>
+              <input 
+                id={`d${model.ID}`} 
+                type="checkbox" 
+                checked={this.state.selectedModels.some(selected => selected.ID === model.ID)}
+                onChange={() => this.addRemoveFromCompare(model.ID)} 
+              />
+              &nbsp;<span id={`t${model.ID}`}>{this.getDisplayValue(model.Title)}</span>
+            </div>
+          ))}
+        </div>
+        <div className={styles.innerCompare}>
+          {[...Array(this.MAX_MODELS)].map((_, index) => {
+            const num = index + 1;
+            const model = this.state.selectedModels[num - 1];
+            return (
+              <div key={`item${num}`} id={`item${num}`} className={styles.oneItem} style={{ display: model ? 'inline' : 'none' }}>
+                {model && (
+                  <>
+                    <div id={`i${num}1`} className={styles.theTitle}>{this.getDisplayValue(model.Title)}</div>
+                    <div className={styles.modelDetails}>
+                      <div><strong>קוד מודל:</strong> {this.getDisplayValue(model.ModelCode)}</div>
+                      <div><strong>מחיר לצרכן:</strong> {this.getDisplayValue(model.ConsumerPrice)}</div>
+                      <div><strong>מותג:</strong> {this.getDisplayValue(model.Brand?.Title)}</div>
+                      <div><strong>סגמנט:</strong> {this.getDisplayValue(model.Segment?.Title)}</div>
+                      <div><strong>סוג מנוע:</strong> {this.getDisplayValue(model.EngineType?.Title)}</div>
+                      <div><strong>הספק:</strong> {this.getDisplayValue(model.Power)}</div>
+                      <div><strong>צריכת דלק ממוצעת:</strong> {this.getDisplayValue(model.AvrgFuelUsage)}</div>
+                      <div><strong>טווח נסיעה:</strong> {this.getDisplayValue(model.DrivingRange)}</div>
+                      <div><strong>רמת אבזור בטיחותי:</strong> {this.getDisplayValue(model.SafetyLevel)}</div>
+                      <div><strong>מדינת ייצור:</strong> {this.getDisplayValue(model.ManufacturingCountry?.Title)}</div>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {this.state.selectedModels.length >= 2 && (
+          <button className={styles.saveButton} onClick={() => this.saveComparation()}>
+            שמירת השוואה
+          </button>
+        )}
+         <button className={styles.saveButton} onClick={() => this.EditComparations()}>
+            עריכת השוואות שלי
+          </button>
+      </section>
+    </section>
+  );
+}
+
 }
