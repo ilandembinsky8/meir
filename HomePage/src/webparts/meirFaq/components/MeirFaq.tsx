@@ -36,7 +36,7 @@ export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
     try {
       const items: any[] = await this._utils.GetItems(
         "שאלות ותשובות",
-        "Title,ID,Answer,EntriesNumber",
+        "Title,ID,Answer,EntriesNumber,Created",
         null,
         "Title",
         true, 

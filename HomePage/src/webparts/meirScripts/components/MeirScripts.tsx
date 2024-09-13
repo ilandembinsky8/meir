@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './MeirScripts.module.scss';
 import { IMeirScriptsProps } from './IMeirScriptsProps';
 
-const siteURL = "KBMCT2" //KBMCT1
+const siteURL = "KBMCT2"; //KBMCT1
 
 export default class MeirScripts extends React.Component<IMeirScriptsProps, {}> {
   public render(): React.ReactElement<IMeirScriptsProps> {

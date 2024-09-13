@@ -87,6 +87,12 @@
             .root-88.root-88.root-88.root-88.root-88 {
                 background-color: #e4eaeb !important;
             }
+            .root-95.root-95.root-95.root-95.root-95 {
+                background-color: #e4eaeb !important;
+            }
+            .root-152.root-152.root-152.root-152.root-152 {
+                background-color: #e4eaeb !important;
+            }
         }
         
         @import '~@fluentui/react/dist/sass/References.scss';
@@ -114,11 +120,14 @@
                 font-family: Assistant-SemiBold;
                 font-size: 2rem;
                 margin-top: 0px;
-                color: black
+                color: black;
             }
             .updateArea .updates .headLine .link {
                 float: left;
-                margin-top: 10px
+                margin-top: 10px;
+                cursor: pointer;
+                color: blue;
+                text-decoration: underline;
             }
             .updateArea .updates .upList {
                 float: right;

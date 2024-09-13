@@ -55,4 +55,33 @@
         width: 100%;
         margin-top: 10px
     }
+    //////
+    .selectBox {
+        width: 95%;
+        padding: 8px 63px;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f7f7f7;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        appearance: none;
+        /* Remove default dropdown arrow in some browsers */
+        -webkit-appearance: none;
+        /* Remove default dropdown arrow in Safari */
+        -moz-appearance: none;
+        /* Remove default dropdown arrow in Firefox */
+    }
+    .selectBox:focus {
+        border-color: #0078d4;
+        /* Change border color on focus */
+        outline: none;
+        /* Remove default focus outline */
+        box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
+        /* Add subtle shadow */
+    }
+    .selectBox option {
+        padding: 10px;
+        /* Add padding to options for better readability */
+    }
 }

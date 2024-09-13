@@ -59,6 +59,36 @@ export class Utils  {
       throw error; // Re-throw the error to handle it further up the chain if needed
     }
   }
+
+  public async AddItem (data: any, listTitle: string) : Promise<void> {
+    try {
+      const addedItem = await sp.web.lists.getByTitle(listTitle).items.add(data);
+      console.log("Added to list: ", addedItem);
+    } catch (error) {
+      console.error("Error adding to list", error);
+    } 
+ }
+
+ public async RemoveItemFavorites(updateId: number, listName: string): Promise<void> {
+  try {
+    const items = await sp.web.lists.getByTitle(listName)
+      .items.filter(`UpdateID eq ${updateId}`)
+      .get();
+
+    if (items.length === 0) {
+      throw new Error("Item not found in favorites list.");
+    }
+
+    const itemId = items[0].Id;
+
+    // Now, delete the item by its list item ID
+    await sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
+    console.log(`Item with ID ${itemId} removed from list ${listName}`);
+  } catch (error) {
+    console.error(`Error removing item from list ${listName}:`, error);
+    throw error;
+  }
+ }
   
   public limitChars(text: string, num: number) {
     if(!text || !num || text.length <= num)
