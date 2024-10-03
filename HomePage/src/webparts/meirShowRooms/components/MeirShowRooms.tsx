@@ -99,7 +99,7 @@ export default class MeirShowRooms extends React.Component<IMeirShowRoomsProps, 
                 <div className={styles.data}>
                   <div className={styles.title}>אולמות תצוגה</div>
                   <div 
-                    className={styles.text}
+                    className={this.state.selectedOption ? styles.textLink : styles.text}
                     onClick={this.handleTextClick} 
                   >
                     {this.state.selectedOption ? `כניסה לאולם תצוגה - מותג: ${this.state.selectedOption}` : 'אולמות תצוגה לפי מותגים'}

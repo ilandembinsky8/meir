@@ -98,4 +98,11 @@
         background-position: center center;
         background-repeat: no-repeat;
     }
+    .link {
+        float: left;
+        margin-top: 10px;
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
 }

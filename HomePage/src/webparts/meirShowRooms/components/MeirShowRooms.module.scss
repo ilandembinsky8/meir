@@ -55,6 +55,14 @@
         width: 100%;
         margin-top: 10px
     }
+    .linksList .oneItem .data .textLink {
+        float: right;
+        width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
     //////
     .selectBox {
         width: 95%;

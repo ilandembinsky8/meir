@@ -128,7 +128,7 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
                 <div className={styles.data}>
                   <div className={styles.title}>תסריטי שיחה</div>
                   <div 
-                    className={styles.text}
+                    className={this.state.selectedOption ? styles.textLink : styles.text}
                     onClick={this.handleTextClick} // Add onClick handler
                   >
                     {/* Display the selected option or a placeholder text */}

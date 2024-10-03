@@ -10,6 +10,8 @@ export interface IBrandsState {
   currItems: any[];
   index: number;
   limit: string;
+  leftArrowClass: string;
+  rightArrowClass: string;
 }
 
 interface IBrandItem {
@@ -20,7 +22,6 @@ interface IBrandItem {
   Picture1?: string; // Assuming Picture1 is a JSON string
 }
 
-
 export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrandsState> {
 
   private _utils: Utils;
@@ -28,7 +29,14 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
   constructor(props: IMeirBrandsProps) {
     super(props);
     this._utils = new Utils();
-    this.state = { allItems: [], currItems: [], index: 1, limit: "Prev" };
+    this.state = {
+      allItems: [],
+      currItems: [],
+      index: 1,
+      limit: "Prev",
+      leftArrowClass: "arrow_left" ,  
+      rightArrowClass:  "arrow_right_grey"  
+    };
     
     this.GetBrands = this.GetBrands.bind(this);
     this.GetCurrentBrands = this.GetCurrentBrands.bind(this);
@@ -68,8 +76,6 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
     }
   }
   
-  
-
   private GetCurrentBrands(index: number) {
     const currItems = [];
     const length = (index + 5 > this.state.allItems.length ? this.state.allItems.length : index + 5);
@@ -89,14 +95,25 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
 
     const newIndex = this.state.index + k;
     let newLimit = "None";
+    let newLeftArrowClass = "arrow_left";  // Default active class
+    let newRightArrowClass = "arrow_right";  // Default active class
 
-    if (newIndex <= 1 && k === -1) {
+    // Check if we're at the start or end of the list
+    if (newIndex <= 1) {
       newLimit = "Prev";
-    } else if (newIndex >= this.state.allItems.length - 5 && k === 1) {
+      newRightArrowClass = "arrow_right_grey";  // Disable right arrow      
+    } 
+    if (newIndex >= this.state.allItems.length - 5) {
       newLimit = "Next";
+      newLeftArrowClass = "arrow_left_grey";  // Disable left arrow
     }
 
-    this.setState({ index: newIndex, limit: newLimit }, () => {
+    this.setState({
+      index: newIndex,
+      limit: newLimit,
+      leftArrowClass: newLeftArrowClass,
+      rightArrowClass: newRightArrowClass
+    }, () => {
       this.GetCurrentBrands(newIndex);
     });
   }
@@ -109,11 +126,15 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
   }
 
   public render(): React.ReactElement<IMeirBrandsProps> {
+    const leftArrowClass = this.state.leftArrowClass === 'arrow_left_grey' ? styles.arrowLeftGrey : styles.arrowLeft;
+    const rightArrowClass = this.state.rightArrowClass === 'arrow_right_grey' ? styles.arrowRightGrey : styles.arrowRight;
+  
     return (
       <section className={styles.meirBrands}>
         <div className={styles.brands}>
           <div className={styles.brandsInner}>
-            <div className={styles.arrowRight} onClick={() => this.Next(-1)}></div>
+            {/* Apply the computed class for the left arrow */}
+            <div className={`${styles.arrowRight} ${rightArrowClass}`} onClick={() => this.Next(-1)}></div>
             <div className={styles.inner}>
               <div className={styles.title}>
                 <div className={styles.data}>מותגים</div>
@@ -153,11 +174,13 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
                 ))}
               </div>
             </div>
-            <div className={styles.arrowLeft} onClick={() => this.Next(1)}></div>
+            {/* Apply the computed class for the right arrow */}
+            <div className={`${styles.arrowLeft} ${leftArrowClass}`} onClick={() => this.Next(1)}></div>
           </div>
         </div>
       </section>
     );
   }
+  
   
 }

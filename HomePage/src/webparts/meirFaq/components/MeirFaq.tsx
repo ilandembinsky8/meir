@@ -8,6 +8,8 @@ export interface IFAQState {
   currItems: any[];
 }
 
+const siteURL = "KBMCT2"; 
+
 export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
 
   private _utils: Utils;
@@ -120,9 +122,15 @@ export default class MeirFaq extends React.Component<IMeirFaqProps, IFAQState> {
         <section className={styles.meirFaq}>
             <div className={styles.bottomSection}>
                 <div className={styles.qa}>
+                <div className={styles.link} 
+                          onClick={()=> this._utils.OpenTab(`/sites/${siteURL}/SitePages/FAQ.aspx`)} >לכל השאלות</div>
+
                     <div className={styles.titleArea}>
-                        <div className={styles.theTitle}>שאלות ותשובות</div>
+
+                        <div className={styles.theTitle} >שאלות ותשובות</div>
+
                         <div className={styles.theFilter}>
+                         
                             <select onChange={this.handleFilterChange}>
                                 <option value="New">הכי חדשות</option>
                                 <option value="Popular">הכי פופולאריות</option>

@@ -129,18 +129,31 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
         isFavorite: favoriteUpdateIds.includes(item.ID)
       }));
 
-      const signedItemIds = await this.GetSignedItems();
+      if(this.props.description == "page")
+      {
+        const signedItemIds = await this.GetSignedItems();
 
-      const unsignedItems = updatedItems.filter(item => !signedItemIds.includes(item.ID));
-
-      const currentItems = unsignedItems.slice(0, 5);
-      const reserveItems = unsignedItems.slice(5);
-
-      this.setState({ currentItems, reserveItems });
-      this.setState({ 
-        allItems: updatedItems, 
-        selectedUpdate: currentItems[0]
-      });
+        const unsignedItems = updatedItems.filter(item => !signedItemIds.includes(item.ID));
+  
+        const currentItems = unsignedItems.slice(0, 5);
+        const reserveItems = unsignedItems.slice(5);
+  
+        this.setState({ currentItems, reserveItems });
+      
+        this.setState({ 
+          allItems: updatedItems, 
+          selectedUpdate: currentItems[0]
+        });
+      }
+      else
+      {     
+        this.setState({ 
+          allItems: updatedItems, 
+          selectedUpdate: updatedItems[0],
+          currentItems: updatedItems
+        });
+      }
+      
 
     } catch (error) {
       console.error('Error fetching items', error);
@@ -171,8 +184,10 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
     };
   
     try {
-      await this._utils.AddItem(data, "חתימה על עדכונים");    
-      this.updateItemsAfterSign(update.ID);
+      await this._utils.AddItem(data, "חתימה על עדכונים");   
+       
+      if(this.props.description == "page")
+          this.updateItemsAfterSign(update.ID);
     } catch (error) {
       console.error('Error adding item to favorites:', error);
     }
@@ -246,11 +261,14 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
     return (
       <section className={styles.meirUpdates}>
         <div className={styles.updateArea}>
-          <div className={styles.updates}>
-            <div className={styles.headLine}>
+          <div className={styles.updates} style={this.props.description === "page" ? { width: '70%' } : {}}>
+          {this.props.description == "page" ?  <div className={styles.headLine}>
+              <div style={{fontSize: 20}} >עדכונים שלא נקראו</div>
+            </div> :  <div className={styles.headLine}>
               <div className={styles.title} >עדכונים</div>
               <div className={styles.link} onClick={()=> this._utils.OpenTab(`/sites/${siteURL}/SitePages/Updates.aspx`)} >לכל העדכונים</div>
-            </div>
+            </div>}
+          
             <div className={styles.upList}>
               <div className={styles.right}>
                 {currentItems.map((update) => (
