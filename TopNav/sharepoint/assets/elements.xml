@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="MeirTopNav"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="5ffda730-f3d0-4f1a-889b-4c9eae2ffe5a"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
