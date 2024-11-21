@@ -12,10 +12,12 @@ interface IUpdateItem {
   Title: string;
   Detail1: string;
   Picture1: any;
-  isFavorite: boolean,
-  Brand: any,
-  Model: any
+  isFavorite: boolean;
+  Brand: any;
+  Model: any;
+  Attachments?: string[]; // New field for attachments
 }
+
 
 interface IMeirUpdatesState {
   allItems: IUpdateItem[];
@@ -96,27 +98,61 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
     }
   };
 
+
+  private async GetAttachments(itemId: number): Promise<string[]> {
+    try {
+      const response = await fetch(
+        `https://meir365.sharepoint.com/sites/${siteURL}/_api/web/lists/getbytitle('עדכונים')/items(${itemId})/AttachmentFiles`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json;odata=verbose',
+          },
+        }
+      );
+      const data = await response.json();
+  
+      return data.d.results
+        .map((attachment: any) => attachment.ServerRelativeUrl)
+        .filter((url: string) => !url.includes("Reserved_ImageAttachment"));
+    } catch (error) {
+      console.error('Error fetching attachments:', error);
+      return [];
+    }
+  }
+
   
   private GetItems = async () => {
+    
     try {
-      // Fetch the updates
       const items: IUpdateItem[] = await this._utils.GetItems(
         "עדכונים",
         "Title,ID,UpdateType/Title,UpdateType/ID,UpdateDate,Detail1,Picture1,Brand/ID,Model/ID",
         "UpdateType,Brand,Model",
         "Created",
-        false, 
-        "Active eq 1", 
+        false,
+        "Active eq 1",
         4999
       );
-
-      // Parse the Picture1 JSON string into an object
-      const parsedItems = items.map(item => ({
+  
+ 
+      // Fetch attachments for each item
+      const itemsWithAttachments = await Promise.all(
+        items.map(async (item) => {
+          const attachments = await this.GetAttachments(item.ID);
+          return { ...item, Attachments: attachments };
+        })
+      );
+  
+      // Continue existing processing
+      const parsedItems = itemsWithAttachments.map((item) => ({
         ...item,
-        Picture1: item.Picture1 ? JSON.parse(item.Picture1) : null,
-        isFavorite: false // Initially set to false
+        Picture1: item.Picture1 ? this.SetPic(item.ID, item.Picture1) : null,
+        isFavorite: false, // Initially set to false
       }));
+  
 
+      debugger;
       // Get the current user
       await this.GetCurrentUser();
 
@@ -158,6 +194,23 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
     } catch (error) {
       console.error('Error fetching items', error);
     }
+  }
+
+
+  private SetPic(id: number, pic: string) {
+    debugger;
+    const picObject = JSON.parse(pic);
+    const fileName = picObject.fileName;
+
+
+    var site = '117513fa-1454-464e-9f1c-36d06c716776,2cf4f04d-18d0-4eb6-b9e2-28c4c4903a02';
+    var list = 'f66f47c2-4743-4244-bc68-a9883f7b17b2';
+    var picUrl = "https://meir365.sharepoint.com/sites/KBMCT2/_api/v2.1/sites('" + site + 
+    "')/lists('" + list +
+    "')/items('" + id + "')/attachments('" + fileName +
+    "')/thumbnails/0/c400x400/content?prefer=noredirect%2Cclosestavailablesize";
+    
+    return picUrl;
   }
 
   public componentDidMount() {
@@ -257,79 +310,167 @@ export default class MeirUpdates extends React.Component<IMeirUpdatesProps, IMei
 
   render(): React.ReactElement<IMeirUpdatesProps> {
     const { currentItems, selectedUpdate, isPopupVisible } = this.state;
-
+  
+    const showUnreadMessage = this.props.description === "page" && currentItems.length === 0;
+    const unreadCount = this.state.reserveItems.length + currentItems.length;
+  
     return (
       <section className={styles.meirUpdates}>
         <div className={styles.updateArea}>
           <div className={styles.updates} style={this.props.description === "page" ? { width: '70%' } : {}}>
-          {this.props.description == "page" ?  <div className={styles.headLine}>
-              <div style={{fontSize: 20}} >עדכונים שלא נקראו</div>
-            </div> :  <div className={styles.headLine}>
-              <div className={styles.title} >עדכונים</div>
-              <div className={styles.link} onClick={()=> this._utils.OpenTab(`/sites/${siteURL}/SitePages/Updates.aspx`)} >לכל העדכונים</div>
-            </div>}
-          
-            <div className={styles.upList}>
-              <div className={styles.right}>
-                {currentItems.map((update) => (
-                  <div
-                    key={update.ID}
-                    className={`${styles.oneUpdate} ${selectedUpdate?.ID === update.ID ? styles.oneUpdateSelected : ''}`}       
-                  >
-                    {update.isFavorite ? (
-                      <div className={styles.icon} onClick={() => this.RemoveFromFavorites(update.ID)}>
-                        <img src={`/sites/${siteURL}/SiteAssets/cut/faveStar.png`}
-                        style={{width: 21}} alt={`Icon for ${update.UpdateType?.Title || 'Update'}`} />
-                      </div>
-                    ) : (
-                      <div className={styles.icon} onClick={() => this.AddToFavorites(update)}>
-                        <img src={`/sites/${siteURL}/SiteAssets/cut/favorite.svg`} alt={`Icon for ${update.UpdateType?.Title || 'Update'}`} />
-                      </div>
-                    )}
-                    
-                    <div className={styles.data} onClick={() => this.handleUpdateClick(update)}>
-                      <div className={styles.r100}>
-                        <div className={styles.title}>{update.UpdateType?.Title || 'Update Type'}</div>
-                        <div className={styles.date}>{this._utils.formatDate(update.UpdateDate)}</div>
-                      </div>
-                      <div className={styles.text}>
-                        {update.Title}
-                      </div>
+            {this.props.description === "page" ? (
+              <div className={styles.headLine}>
+                <div style={{ fontSize: 20 }}>עדכונים שלא נקראו</div>
+              </div>
+            ) : (
+              <div className={styles.headLine}>
+                <div className={styles.title}>עדכונים</div>
+                <div
+                  className={styles.link}
+                  onClick={() => this._utils.OpenTab(`/sites/${siteURL}/SitePages/Updates.aspx`)}
+                >
+                  לכל העדכונים
+                </div>
+              </div>
+            )}
+  
+            <div
+              className={styles.upList}
+              style={
+                currentItems.length === 0
+                  ? { height: 'auto' } // Removes the fixed height
+                  : { height: '581px' } // Keeps the fixed height when there are items
+              }
+            >
+              {showUnreadMessage ? (
+                <div className={styles.noUpdatesMessage}>אין עדכונים שלא נקראו</div>
+              ) : (
+                <>
+                  {this.props.description === "page" && (
+                    <div className={styles.unreadCount}>
+                      {`נותרו ${unreadCount} עדכונים שלא נקראו`}
                     </div>
+                  )}
+                  <div className={styles.right}>
+                    {currentItems.map((update) => (
+                      <div
+                        key={update.ID}
+                        className={`${styles.oneUpdate} ${
+                          selectedUpdate?.ID === update.ID ? styles.oneUpdateSelected : ''
+                        }`}
+                      >
+                        {update.isFavorite ? (
+                          <div
+                            className={styles.icon}
+                            onClick={() => this.RemoveFromFavorites(update.ID)}
+                          >
+                            <img
+                              src={`/sites/${siteURL}/SiteAssets/cut/faveStar.png`}
+                              style={{ width: 21 }}
+                              alt={`Icon for ${update.UpdateType?.Title || 'Update'}`}
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className={styles.icon}
+                            onClick={() => this.AddToFavorites(update)}
+                          >
+                            <img
+                              src={`/sites/${siteURL}/SiteAssets/cut/favorite.svg`}
+                              alt={`Icon for ${update.UpdateType?.Title || 'Update'}`}
+                            />
+                          </div>
+                        )}
+  
+                        <div
+                          className={styles.data}
+                          onClick={() => this.handleUpdateClick(update)}
+                        >
+                          <div className={styles.r100}>
+                            <div className={styles.title}>
+                              {update.UpdateType?.Title || 'Update Type'}
+                            </div>
+                            <div className={styles.date}>
+                              {this._utils.formatDate(update.UpdateDate)}
+                            </div>
+                          </div>
+                          <div className={styles.text}>{update.Title}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className={styles.oneUpdateDetails}>
-                {selectedUpdate && (
-                  <>
-                    {selectedUpdate.Picture1 && selectedUpdate.Picture1.serverRelativeUrl && (
-                      <div className={styles.r100} onClick={() => this.setState({ isPopupVisible: true })}>
-                        <img src={selectedUpdate.Picture1.serverRelativeUrl} alt={`image for ${selectedUpdate.Title}`} />
-                      </div>
+                  <div className={styles.oneUpdateDetails}>
+                    {selectedUpdate && (
+                      <>
+                        {selectedUpdate.Picture1 && (
+                          <div
+                            className={styles.r100}
+                            onClick={() => this.setState({ isPopupVisible: true })}
+                          >
+                            <img
+                              src={selectedUpdate.Picture1}
+                              alt={`image for ${selectedUpdate.Title}`}
+                            />
+                          </div>
+                        )}
+                        <div
+                          className={styles.text}
+                          onClick={() => this.setState({ isPopupVisible: true })}
+                          dangerouslySetInnerHTML={{ __html: selectedUpdate.Detail1 }}
+                        ></div>
+                      </>
                     )}
-                    <div className={styles.text} onClick={() => this.setState({ isPopupVisible: true })} dangerouslySetInnerHTML={{ __html: selectedUpdate.Detail1 }}>
-                    </div>
-                  </>
-                )}
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
-
+  
         {isPopupVisible && selectedUpdate && (
           <div className={styles.popup}>
             <div className={styles.popupContent}>
               <h2>{selectedUpdate.Title}</h2>
-              {selectedUpdate.Picture1 && selectedUpdate.Picture1.serverRelativeUrl && (
-                <img src={selectedUpdate.Picture1.serverRelativeUrl} alt={`Popup image for ${selectedUpdate.Title}`} />
+              {selectedUpdate.Picture1 && (
+                <img
+                  src={selectedUpdate.Picture1}
+                  alt={`Popup image for ${selectedUpdate.Title}`}
+                />
               )}
-              <div className={styles.popupText} dangerouslySetInnerHTML={{ __html: selectedUpdate.Detail1 }}>
-              </div>
-              <button className={styles.closeButton} onClick={()=> this.handlePopupClose(selectedUpdate)}>קראתי, הבנתי</button>
+              <div
+                className={styles.popupText}
+                dangerouslySetInnerHTML={{ __html: selectedUpdate.Detail1 }}
+              ></div>
+              {selectedUpdate.Attachments && selectedUpdate.Attachments.length > 0 && (
+                <div className={styles.attachments}>
+                  <h3>קבצים מצורפים</h3>
+                  <ul>
+                    {selectedUpdate.Attachments.map((attachment, index) => (
+                      <li key={index}>
+                        <a
+                          href={attachment}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {attachment.split('/').pop()} {/* Display the filename */}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button
+                className={styles.closeButton}
+                onClick={() => this.handlePopupClose(selectedUpdate)}
+              >
+                קראתי, הבנתי
+              </button>
             </div>
           </div>
         )}
       </section>
     );
   }
+  
+  
 }

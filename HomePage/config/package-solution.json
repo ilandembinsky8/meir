@@ -1,40 +1,38 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-  "solution": {
-    "name": "meir-hp-client-side-solution",
-    "id": "477760ae-267a-466a-bd33-14afbfb1a39e",
-    "version": "1.0.0.0",
-    "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
-    "isDomainIsolated": false,
-    "developer": {
-      "name": "",
-      "websiteUrl": "",
-      "privacyUrl": "",
-      "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.16.0-rc.0"
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "meir-hp-client-side-solution",
+        "id": "477760ae-267a-466a-bd33-14afbfb1a39e",
+        "version": "1.0.0.1",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true,
+        "isDomainIsolated": false,
+        "developer": {
+            "name": "",
+            "websiteUrl": "",
+            "privacyUrl": "",
+            "termsOfUseUrl": "",
+            "mpnId": "Undefined-1.16.0-rc.0"
+        },
+        "metadata": {
+            "shortDescription": {
+                "default": "meirHP description"
+            },
+            "longDescription": {
+                "default": "meirHP description"
+            },
+            "screenshotPaths": [],
+            "videoUrl": "",
+            "categories": []
+        },
+        "features": [{
+            "title": "meir-hp Feature",
+            "description": "The feature that activates elements of the meir-hp solution.",
+            "id": "a0af2bc0-cb99-4ef4-b38b-377bd304c7a5",
+            "version": "1.0.0.0"
+        }]
     },
-    "metadata": {
-      "shortDescription": {
-        "default": "meirHP description"
-      },
-      "longDescription": {
-        "default": "meirHP description"
-      },
-      "screenshotPaths": [],
-      "videoUrl": "",
-      "categories": []
-    },
-    "features": [
-      {
-        "title": "meir-hp Feature",
-        "description": "The feature that activates elements of the meir-hp solution.",
-        "id": "a0af2bc0-cb99-4ef4-b38b-377bd304c7a5",
-        "version": "1.0.0.0"
-      }
-    ]
-  },
-  "paths": {
-    "zippedPackage": "solution/meir-hp.sppkg"
-  }
+    "paths": {
+        "zippedPackage": "solution/meir-hp.sppkg"
+    }
 }

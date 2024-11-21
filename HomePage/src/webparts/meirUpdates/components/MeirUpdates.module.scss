@@ -245,4 +245,42 @@
             .closeButton:hover {
                 background-color: #ff1c1c;
             }
+            .attachments {
+                margin-top: 20px;
+                h3 {
+                    margin-bottom: 10px;
+                }
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                    li {
+                        margin-bottom: 5px;
+                        a {
+                            text-decoration: none;
+                            color: #0078d4;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+            /* Styling for no unread updates message */
+            .noUpdatesMessage {
+                text-align: center;
+                font-size: 18px;
+                color: #888;
+                margin: 20px 0;
+            }
+            /* Styling for unread updates count */
+            .unreadCount {
+                text-align: center;
+                font-size: 16px;
+                font-weight: bold;
+                color: #444;
+                background-color: #f0f0f0;
+                border-radius: 8px;
+                padding: 10px;
+                margin: 10px 0;
+            }
         }

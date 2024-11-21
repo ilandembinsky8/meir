@@ -60,12 +60,12 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
         100
       );
     
-      // Parse the Picture1 JSON string into an object or keep it null if parsing fails
       const parsedItems = items.map((item: IBrandItem) => ({
         ...item,
-        Picture1: item.Picture1 ? JSON.parse(item.Picture1) : null
+        Picture1: item.Picture1 ? this.SetPic(item.ID, item.Picture1) : null
       }));
     
+      debugger;
       console.log("Brands Items: ", parsedItems);
       this.setState({ allItems: parsedItems }, () => {
         this.GetCurrentBrands(1);
@@ -75,6 +75,21 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
       console.error('Error fetching items', error);
     }
   }
+
+  private SetPic(id: any, pic: string) {
+    const picObject = JSON.parse(pic);
+    const fileName = picObject.fileName;
+
+    var site = '117513fa-1454-464e-9f1c-36d06c716776,2cf4f04d-18d0-4eb6-b9e2-28c4c4903a02';
+    var list = 'c2daef00-b3f0-444f-8a09-2d32a93d8bdd';
+    var picUrl = "https://meir365.sharepoint.com/sites/KBMCT2/_api/v2.1/sites('" + site + 
+    "')/lists('" + list +
+    "')/items('" + id + "')/attachments('" + fileName +
+    "')/thumbnails/0/c400x400/content?prefer=noredirect%2Cclosestavailablesize";
+    
+    return picUrl;
+  }
+
   
   private GetCurrentBrands(index: number) {
     const currItems = [];
@@ -143,17 +158,20 @@ export default class MeirBrands extends React.Component<IMeirBrandsProps, IBrand
                 {this.state.currItems.map((brand: any) => (
                   <div className={styles.oneItem} key={brand.ID} onClick={() =>
                     this._utils.OpenTab(
-                      `/sites/${siteURL}/SitePages/Brand.aspx?Brand=${brand.ID}`
+                      `/sites/${siteURL}/SitePages/Brand.aspx?Brand=${brand.Title}&BrandID=${brand.ID}`
                     )
                   }>
-                    {brand.Picture1 && brand.Picture1.serverRelativeUrl ? (
-                      <div
-                        id={brand.ID}
-                        className={styles.theImage}
-                        style={{ backgroundImage: `url(${brand.Picture1.serverRelativeUrl})` }}
-                        onMouseOver={() => this.hideShow(brand.ID, `${brand.ID}_data`)}
-                      ></div>
-                    ) : (
+                    {brand.Picture1 ? (
+                    <div
+                    id={brand.ID}
+                    className={styles.theImage}
+                    style={{
+                      backgroundImage: `url("${encodeURI(brand.Picture1)}")`
+                    }}
+                    onMouseOver={() => this.hideShow(brand.ID, `${brand.ID}_data`)}
+                  >
+                  </div>
+                                      ) : (
                       <div
                         id={brand.ID}
                         className={styles.theImage}

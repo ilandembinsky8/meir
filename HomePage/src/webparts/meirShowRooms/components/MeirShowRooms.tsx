@@ -64,6 +64,10 @@ export default class MeirShowRooms extends React.Component<IMeirShowRoomsProps, 
         selectedOption,
         selectedItem: selectedItem
       });
+
+      this._utils.OpenTab(
+        `/sites/${siteURL}/SitePages/Showrooms.aspx?Brand=${selectedItem.Title}&BrandID=${selectedItem.ID}`
+      )
     } else {
       this.setState({ 
         selectedOption,

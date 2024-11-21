@@ -3,43 +3,48 @@ import styles from './MeirConversationScripts.module.scss';
 import { IMeirConversationScriptsProps } from './IMeirConversationScriptsProps';
 import { Utils } from '../../../Services/Utils';
 
-const siteURL = "KBMCT2"; //KBMCT1
+const siteURL = "KBMCT2";
 
-// Define the interface for brand items
 interface IBrandItem {
   Title: string;
   ID: number;
 }
 
 export interface IScriptsState {
-  allItems: IBrandItem[]; // Use the interface here
+  allItems: IBrandItem[];
+  modelItems: IBrandItem[];
   selectedOption: string;
-  selectedItem: IBrandItem | null; // Update the type to IBrandItem or null
-  attachmentUrls: string[]; // New state to hold attachment URLs
+  selectedItem: IBrandItem | null;
+  attachmentUrls: string[];
 }
 
 export default class MeirConversationScripts extends React.Component<IMeirConversationScriptsProps, IScriptsState> {
 
   private _utils: Utils;
-  
+
   constructor(props: IMeirConversationScriptsProps) {
+
     super(props);
     this._utils = new Utils();
- 
+
     this.state = {
       allItems: [],
-      selectedOption: '', 
-      selectedItem: null, // Initialize with null
-      attachmentUrls: [] // Initialize with an empty array
+      modelItems: [],
+      selectedOption: '',
+      selectedItem: null,
+      attachmentUrls: []
     };
 
     this.GetBrands = this.GetBrands.bind(this);
+    this.GetModels = this.GetModels.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleSelectChangeModels = this.handleSelectChangeModels.bind(this);
     this.handleTextClick = this.handleTextClick.bind(this);
   }
 
   componentDidMount() {
     this.GetBrands();
+    this.GetModels();
   }
 
   private async GetBrands() {
@@ -49,11 +54,11 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
         "Title,ID",
         null,
         "Title",
-        true, 
-        null, 
+        true,
+        null,
         100
       );
-        
+
       console.log("Brands Items: ", items);
       this.setState({ allItems: items });
     } catch (error) {
@@ -61,8 +66,36 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
     }
   }
 
-  private async fetchAttachments(itemId: number): Promise<string[]> {
-    const endpoint = `/sites/${siteURL}/_api/web/lists/getbytitle('מותגים')/items(${itemId})/AttachmentFiles`;
+  private async GetModels() {
+    try {
+      const items: IBrandItem[] = await this._utils.GetItems(
+        "דגמים",
+        "Title,ID",
+        null,
+        "Title",
+        true,
+        null,
+        100
+      );
+  
+      // Fetch attachments concurrently for all items
+      const attachmentResults = await Promise.all(
+        items.map(item => this.fetchAttachments(item.ID, "דגמים"))
+      );
+  
+      // Filter items based on whether they have attachments
+      const modelsWithAttachments = items.filter((item, index) => attachmentResults[index].length > 0);
+  
+      console.log("Filtered model items with attachments: ", modelsWithAttachments);
+      this.setState({ modelItems: modelsWithAttachments });
+    } catch (error) {
+      console.error('Error fetching items', error);
+    }
+  }
+  
+  private async fetchAttachments(itemId: number, listName: string): Promise<string[]> {
+ 
+    const endpoint = `/sites/${siteURL}/_api/web/lists/getbytitle('${listName}')/items(${itemId})/AttachmentFiles`;
 
     try {
       const response = await fetch(endpoint, {
@@ -74,36 +107,59 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
       const data = await response.json();
       return data.d.results.map((attachment: { ServerRelativeUrl: string }) => attachment.ServerRelativeUrl);
     } catch (error) {
-      console.error('Error fetching attachments', error);
+      console.error(`Error fetching attachments from list "${listName}"`, error);
       return [];
     }
   }
 
-  private async handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedOption = event.target.value;
-    const selectedItem = this.state.allItems.find((item: IBrandItem) => item.Title === selectedOption);
-    
+  private async handleChangeForItem(list: string, selectedItem: any, selectedOption: any) {
     if (selectedItem) {
-      const attachmentUrls = await this.fetchAttachments(selectedItem.ID);
-      this.setState({ 
+      
+      debugger;
+      const attachmentUrls = await this.fetchAttachments(selectedItem.ID, list);
+  
+      const pdfAttachments = attachmentUrls.filter(url => url.toLowerCase().endsWith('.pdf'));
+  
+      this.setState({
         selectedOption,
-        selectedItem: selectedItem, // Update the selected item
-        attachmentUrls // Update the state with the fetched attachment URLs
+        selectedItem: selectedItem,
+        attachmentUrls: pdfAttachments, 
       });
+  
+      if (pdfAttachments.length > 0) {
+        window.open(pdfAttachments[0], '_blank');
+      } else {
+        console.error('No PDF attachments found for the selected item');
+      }
     } else {
-      this.setState({ 
+      this.setState({
         selectedOption,
         selectedItem: null,
-        attachmentUrls: [] // Clear the attachment URLs if no item is selected
+        attachmentUrls: [],
       });
     }
   }
+  
+  private async handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {  
+ 
+    const selectedOption = event.target.value;
+    const selectedItem = this.state.allItems.find((item: IBrandItem) => item.Title === selectedOption);
+
+    this.handleChangeForItem("מותגים", selectedItem, selectedOption);
+  }
+
+  private async handleSelectChangeModels(event: React.ChangeEvent<HTMLSelectElement>) {  
+    debugger;
+    const selectedOption = event.target.value;
+    const selectedItem = this.state.modelItems.find((item: IBrandItem) => item.Title === selectedOption);
+    this.handleChangeForItem("דגמים",  selectedItem, selectedOption);
+  }
+
 
   private handleTextClick() {
     const { attachmentUrls } = this.state;
-    
+
     if (attachmentUrls.length > 0) {
-      // Open the first attachment or implement additional logic to select an attachment
       window.open(attachmentUrls[0], '_blank');
     } else {
       console.error('No attachments found for the selected brand');
@@ -127,12 +183,11 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
                 </div>
                 <div className={styles.data}>
                   <div className={styles.title}>תסריטי שיחה</div>
-                  <div 
+                  <div
                     className={this.state.selectedOption ? styles.textLink : styles.text}
-                    onClick={this.handleTextClick} // Add onClick handler
+                    onClick={this.handleTextClick}
                   >
-                    {/* Display the selected option or a placeholder text */}
-                    {this.state.selectedOption ? `תסריט שיחה עבור מותג: ${this.state.selectedOption}` : 'תסריטי שיחה עם נציגי מכירות'}
+                    {this.state.selectedOption ? `תסריט שיחה עבור : ${this.state.selectedOption}` : 'תסריטי שיחה עם נציגי מכירות'}
                   </div>
                   <select
                     className={styles.selectBox}
@@ -143,6 +198,21 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
                       בחר/י מותג
                     </option>
                     {this.state.allItems.map((option) => (
+                      <option key={option.ID} value={option.Title}>
+                        {option.Title}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className={styles.selectBox}
+                    onChange={this.handleSelectChangeModels}
+                    value={this.state.selectedOption}
+                  >
+                    <option value="" disabled>
+                      בחר/י דגם
+                    </option>
+                    {this.state.modelItems.map((option) => (
                       <option key={option.ID} value={option.Title}>
                         {option.Title}
                       </option>
