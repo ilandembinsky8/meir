@@ -1,40 +1,38 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-  "solution": {
-    "name": "meir-brands-comparation-client-side-solution",
-    "id": "7046018c-9e1f-4e04-998c-3da3bfd03db7",
-    "version": "1.0.0.0",
-    "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
-    "isDomainIsolated": false,
-    "developer": {
-      "name": "",
-      "websiteUrl": "",
-      "privacyUrl": "",
-      "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.16.0-rc.0"
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "meir-brands-comparation-client-side-solution",
+        "id": "7046018c-9e1f-4e04-998c-3da3bfd03db7",
+        "version": "1.0.0.1",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true,
+        "isDomainIsolated": false,
+        "developer": {
+            "name": "",
+            "websiteUrl": "",
+            "privacyUrl": "",
+            "termsOfUseUrl": "",
+            "mpnId": "Undefined-1.16.0-rc.0"
+        },
+        "metadata": {
+            "shortDescription": {
+                "default": "Meir-BrandsComparation description"
+            },
+            "longDescription": {
+                "default": "Meir-BrandsComparation description"
+            },
+            "screenshotPaths": [],
+            "videoUrl": "",
+            "categories": []
+        },
+        "features": [{
+            "title": "meir-brands-comparation Feature",
+            "description": "The feature that activates elements of the meir-brands-comparation solution.",
+            "id": "8861a9fc-6e19-406e-984b-1d3e6b1c853a",
+            "version": "1.0.0.0"
+        }]
     },
-    "metadata": {
-      "shortDescription": {
-        "default": "Meir-BrandsComparation description"
-      },
-      "longDescription": {
-        "default": "Meir-BrandsComparation description"
-      },
-      "screenshotPaths": [],
-      "videoUrl": "",
-      "categories": []
-    },
-    "features": [
-      {
-        "title": "meir-brands-comparation Feature",
-        "description": "The feature that activates elements of the meir-brands-comparation solution.",
-        "id": "8861a9fc-6e19-406e-984b-1d3e6b1c853a",
-        "version": "1.0.0.0"
-      }
-    ]
-  },
-  "paths": {
-    "zippedPackage": "solution/meir-brands-comparation.sppkg"
-  }
+    "paths": {
+        "zippedPackage": "solution/meir-brands-comparation.sppkg"
+    }
 }

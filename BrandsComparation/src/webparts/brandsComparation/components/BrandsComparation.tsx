@@ -13,8 +13,19 @@ sp.setup({
 });
 
 export interface IState { 
-  models: any[];  // Store all model data as an array of objects
-  selectedModels: any[]; // Store selected models data here
+  models: any[];  // All model data
+  selectedModels: any[]; // Selected models for comparison
+  brandOptions: string[];
+  engineTypeOptions: string[];
+  segmentOptions: string[];
+  priceRangeOptions: string[];
+
+  // New state variables for the selected filters
+  selectedBrand: string;
+  selectedEngineType: string;
+  selectedSegment: string;
+  selectedPriceRange: string;
+  showFilters: boolean
 }
 
 export default class BrandsComparation extends React.Component<IBrandsComparationProps, IState> {
@@ -27,7 +38,21 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
   constructor(props: IBrandsComparationProps) {
     super(props);
 
-    this.state = { models: [], selectedModels: [] };  
+    this.state = { 
+      models: [],
+      selectedModels: [],
+      brandOptions: [],
+      engineTypeOptions: [],
+      segmentOptions: [],
+      priceRangeOptions: [],
+
+      // Initial selected filter values
+      selectedBrand: '',
+      selectedEngineType: '',
+      selectedSegment: '',
+      selectedPriceRange: '',
+      showFilters: false
+    };  
     this.GetModels();
   }
 
@@ -42,9 +67,23 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
         null,  
         500
       );
-      
+
       this.setState({ models });
-      
+
+      // Extract unique values for the filters
+      const brandOptions = this.getUniqueValues(models, 'Brand.Title');
+      const engineTypeOptions = this.getUniqueValues(models, 'EngineType.Title');
+      const segmentOptions = this.getUniqueValues(models, 'Segment.Title');
+      const priceRangeOptions = this.getUniqueValues(models, 'ConsumerPrice');
+
+      // Set the unique filter options in state
+      this.setState({
+        brandOptions,
+        engineTypeOptions,
+        segmentOptions,
+        priceRangeOptions
+      });
+
       const brandCodesArray = this.getBrandCodes();
       
       // Filter the models that match the IDs from brandCodesArray
@@ -62,43 +101,10 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       });
   
       console.log(brandCodesArray); 
-      debugger;
+  
     } catch (error) {
       console.error('Error fetching items', error);
     }   
-  }
-  
-
-  private async GetItems(
-    listName: string,
-    columns: string,
-    expand: string | null,
-    orderCol: string | null, 
-    orderType: boolean | null, 
-    filters: string | null, 
-    top: number
-  ): Promise<any[]> {
-    try {
-      let query = sp.web.lists.getByTitle(listName).items.select(columns).top(top);
-  
-      if (expand) {
-        query = query.expand(expand);
-      }
-
-      if (orderCol && orderType !== null) {
-        query = query.orderBy(orderCol, orderType);
-      }
-  
-      if (filters) {
-        query = query.filter(filters);
-      }
-  
-      const items = await query.get();
-      return items;
-    } catch (e) {
-      console.error('Error - get query', e);
-      throw e; 
-    }
   }
 
   private getBrandCodes(): number[] {
@@ -111,7 +117,98 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       return [];
     }
   } 
-  
+
+  // Utility function to get unique values from a field in the models
+  private getUniqueValues(models: any[], field: string): string[] {
+    const values = models.map(model => this.getNestedValue(model, field));
+    const uniqueValues = Array.from(new Set(values)).filter(value => value); // Remove empty values
+    return uniqueValues;
+  }
+
+  // Utility function to get the value from a nested field (e.g., 'Brand.Title')
+  private getNestedValue(obj: any, field: string): string {
+    const fields = field.split('.');
+    let value = obj;
+    for (const key of fields) {
+      if (value && value[key]) {
+        value = value[key];
+      } else {
+        return '';
+      }
+    }
+    return value;
+  }
+
+  private async GetItems(
+    listName: string,
+    columns: string,
+    expand: string | null,
+    orderCol: string | null, 
+    orderType: boolean | null, 
+    filters: string | null, 
+    top: number
+  ): Promise<any[]> {
+    try {
+      let query = sp.web.lists.getByTitle(listName).items.select(columns).top(top);
+
+      if (expand) {
+        query = query.expand(expand);
+      }
+
+      if (orderCol && orderType !== null) {
+        query = query.orderBy(orderCol, orderType);
+      }
+
+      if (filters) {
+        query = query.filter(filters);
+      }
+
+      const items = await query.get();
+      return items;
+    } catch (e) {
+      console.error('Error - get query', e);
+      throw e; 
+    }
+  }
+
+  private applyFilters() {
+    let filteredModels = [...this.state.models];
+
+    // Apply each filter based on the selected value
+    if (this.state.selectedBrand) {
+      filteredModels = filteredModels.filter(model => model.Brand && model.Brand.Title === this.state.selectedBrand);
+    }
+
+    if (this.state.selectedEngineType) {
+      filteredModels = filteredModels.filter(model => model.EngineType && model.EngineType.Title === this.state.selectedEngineType);
+    }
+
+    if (this.state.selectedSegment) {
+      filteredModels = filteredModels.filter(model => model.Segment && model.Segment.Title === this.state.selectedSegment);
+    }
+
+    if (this.state.selectedPriceRange) {
+      filteredModels = filteredModels.filter(model => model.ConsumerPrice === this.state.selectedPriceRange);
+    }
+
+    // Update the state with the filtered models
+    this.setState({ models: filteredModels });
+    this.setState({showFilters : true});
+  }
+
+  private handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>, filterName: string) {
+    const value = event.target.value;
+
+    // Update the selected filter value based on the filter name
+    this.setState({ [filterName]: value } as unknown as IState);
+  }
+
+
+  private getDisplayValue(value: any): string {
+    return value ? value : "לא הוזן";
+  }
+
+
   private addRemoveFromCompare(modelId: number) {
     const isChecked = (document.getElementById(`d${modelId}`) as HTMLInputElement).checked;
     const selectedModel = this.state.models.find(model => model.ID === modelId);
@@ -165,72 +262,181 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       alert('Failed to save comparation.');
     }
   }
-  
 
   private EditComparations(){
     var url = "/sites/KBMCT2/Lists/ModelsComparison/view.aspx";
     window.open(url, '_blank');
   }
 
-  private getDisplayValue(value: any): string {
-    return value ? value : "לא הוזן";
+  private resetFilters() {
+    // Reset the filter states (if you store them in state, for example)
+    this.setState({
+      selectedBrand: "", // Or whatever the default value for your filters is
+      selectedEngineType: "",
+      selectedPriceRange: "",
+      selectedSegment: "",
+    });
+  
+    // Fetch all models again (without filters)
+    this.GetModels();
+    this.setState({showFilters : false});
   }
-
-public render(): React.ReactElement<IBrandsComparationProps> {
-  return (
-    <section className={styles.brandsComparation}>
-      <section className={styles.updateArea}>
-        <div className={styles.innerCompare}>
-          {this.state.models.map(model => (
-            <div key={model.ID} className={styles.oneCheckbox}>
-              <input 
-                id={`d${model.ID}`} 
-                type="checkbox" 
-                checked={this.state.selectedModels.some(selected => selected.ID === model.ID)}
-                onChange={() => this.addRemoveFromCompare(model.ID)} 
-              />
-              &nbsp;<span id={`t${model.ID}`}>{this.getDisplayValue(model.Title)}</span>
+  
+  public render(): React.ReactElement<IBrandsComparationProps> {
+    const { models, selectedModels, brandOptions, engineTypeOptions, segmentOptions, priceRangeOptions } = this.state;
+  
+    const noModelsToShow = this.state.showFilters && models.length === 0;
+  
+    return (
+      <section className={styles.brandsComparation}>
+        <section className={styles.updateArea}>
+          <div className={styles.filters}>
+            <select
+              value={this.state.selectedBrand}
+              onChange={(e) => this.handleFilterChange(e, "selectedBrand")}
+            >
+              <option value="">מותג</option>
+              {brandOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <select
+              value={this.state.selectedEngineType}
+              onChange={(e) => this.handleFilterChange(e, "selectedEngineType")}
+            >
+              <option value="">סוג מנוע</option>
+              {engineTypeOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <select
+              value={this.state.selectedSegment}
+              onChange={(e) => this.handleFilterChange(e, "selectedSegment")}
+            >
+              <option value="">קטגוריה</option>
+              {segmentOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <select
+              value={this.state.selectedPriceRange}
+              onChange={(e) => this.handleFilterChange(e, "selectedPriceRange")}
+            >
+              <option value="">טווח מחיר</option>
+              {priceRangeOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+  
+            <button className={styles.filterButton} onClick={() => this.applyFilters()}>
+              סנן
+            </button>
+            <button className={styles.resetButton} onClick={() => this.resetFilters()}>
+              אפס
+            </button>
+          </div>
+  
+          {/* Conditional Messages */}
+          {!this.state.showFilters && (
+            <div >אנא בחר פילטרים.</div>
+          )}
+          {this.state.showFilters && noModelsToShow && (
+            <div >לא נמצאו דגמים תואמים.</div>
+          )}
+  
+          {/* Model checkboxes */}
+          {this.state.showFilters && !noModelsToShow && (
+            <div className={styles.modelsList}>
+              {models.map((model) => (
+                <div key={model.ID} className={styles.modelCard}>
+                  <input
+                    id={`d${model.ID}`}
+                    type="checkbox"
+                    checked={selectedModels.some((selected) => selected.ID === model.ID)}
+                    onChange={() => this.addRemoveFromCompare(model.ID)}
+                  />
+                  &nbsp;<span id={`t${model.ID}`}>{this.getDisplayValue(model.Title)}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className={styles.innerCompare}>
-          {[...Array(this.MAX_MODELS)].map((_, index) => {
-            const num = index + 1;
-            const model = this.state.selectedModels[num - 1];
-            return (
-              <div key={`item${num}`} id={`item${num}`} className={styles.oneItem} style={{ display: model ? 'inline' : 'none' }}>
-                {model && (
-                  <>
-                    <div id={`i${num}1`} className={styles.theTitle}>{this.getDisplayValue(model.Title)}</div>
-                    <div className={styles.modelDetails}>
-                      <div><strong>קוד מודל:</strong> {this.getDisplayValue(model.ModelCode)}</div>
-                      <div><strong>מחיר לצרכן:</strong> {this.getDisplayValue(model.ConsumerPrice)}</div>
-                      <div><strong>מותג:</strong> {this.getDisplayValue(model.Brand?.Title)}</div>
-                      <div><strong>סגמנט:</strong> {this.getDisplayValue(model.Segment?.Title)}</div>
-                      <div><strong>סוג מנוע:</strong> {this.getDisplayValue(model.EngineType?.Title)}</div>
-                      <div><strong>הספק:</strong> {this.getDisplayValue(model.Power)}</div>
-                      <div><strong>צריכת דלק ממוצעת:</strong> {this.getDisplayValue(model.AvrgFuelUsage)}</div>
-                      <div><strong>טווח נסיעה:</strong> {this.getDisplayValue(model.DrivingRange)}</div>
-                      <div><strong>רמת אבזור בטיחותי:</strong> {this.getDisplayValue(model.SafetyLevel)}</div>
-                      <div><strong>מדינת ייצור:</strong> {this.getDisplayValue(model.ManufacturingCountry?.Title)}</div>
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        {this.state.selectedModels.length >= 2 && (
-          <button className={styles.saveButton} onClick={() => this.saveComparation()}>
-            שמירת השוואה
-          </button>
-        )}
-         <button className={styles.saveButton} onClick={() => this.EditComparations()}>
+          )}
+  
+          {/* Display selected models */}
+          <div className={styles.innerCompare}>
+            {[...Array(this.MAX_MODELS)].map((_, index) => {
+              const num = index + 1;
+              const model = selectedModels[num - 1];
+              return (
+                <div
+                  key={`item${num}`}
+                  id={`item${num}`}
+                  className={styles.oneItem}
+                  style={{ display: model ? "inline" : "none" }}
+                >
+                  {model && (
+                    <>
+                      <div id={`i${num}1`} className={styles.theTitle}>
+                        {this.getDisplayValue(model.Title)}
+                      </div>
+                      <div className={styles.modelDetails}>
+                        <div>
+                          <strong>קוד מודל:</strong> {this.getDisplayValue(model.ModelCode)}
+                        </div>
+                        <div>
+                          <strong>מחיר לצרכן:</strong> {this.getDisplayValue(model.ConsumerPrice)}
+                        </div>
+                        <div>
+                          <strong>מותג:</strong> {this.getDisplayValue(model.Brand?.Title)}
+                        </div>
+                        <div>
+                          <strong>סגמנט:</strong> {this.getDisplayValue(model.Segment?.Title)}
+                        </div>
+                        <div>
+                          <strong>סוג מנוע:</strong> {this.getDisplayValue(model.EngineType?.Title)}
+                        </div>
+                        <div>
+                          <strong>הספק:</strong> {this.getDisplayValue(model.Power)}
+                        </div>
+                        <div>
+                          <strong>צריכת דלק ממוצעת:</strong> {this.getDisplayValue(model.AvrgFuelUsage)}
+                        </div>
+                        <div>
+                          <strong>טווח נסיעה:</strong> {this.getDisplayValue(model.DrivingRange)}
+                        </div>
+                        <div>
+                          <strong>רמת אבזור בטיחותי:</strong> {this.getDisplayValue(model.SafetyLevel)}
+                        </div>
+                        <div>
+                          <strong>מדינת ייצור:</strong> {this.getDisplayValue(model.ManufacturingCountry?.Title)}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+  
+          {/* Buttons to save comparison and edit comparisons */}
+          {selectedModels.length >= 2 && (
+            <button className={styles.saveButton} onClick={() => this.saveComparation()}>
+              שמירת השוואה
+            </button>
+          )}
+          <button className={styles.saveButton} onClick={() => this.EditComparations()}>
             עריכת השוואות שלי
           </button>
+        </section>
       </section>
-    </section>
-  );
-}
-
+    );
+  }
+  
 }
