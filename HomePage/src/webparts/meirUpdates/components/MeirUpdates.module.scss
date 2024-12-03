@@ -283,4 +283,30 @@
                 padding: 10px;
                 margin: 10px 0;
             }
+            .checkboxLabel {
+                margin-left: 5px;
+                /* Space between the checkbox and the label */
+                font-size: 14px;
+                /* Adjust the font size of the label */
+                cursor: pointer;
+                /* Changes cursor to pointer when hovering over the label */
+                color: #333;
+                /* Set the text color */
+            }
+            /* Optional: Add styling for the checkbox itself */
+            .checkboxWrapper input[type="checkbox"] {
+                width: 16px;
+                /* Set checkbox size */
+                height: 16px;
+                cursor: pointer;
+                /* Make the checkbox clickable */
+                transition: all 0.3s ease;
+                /* Smooth transition for state change */
+            }
+            .checkboxWrapper input[type="checkbox"]:checked {
+                background-color: #0078d4;
+                /* Set background color when checked */
+                border-color: #0078d4;
+                /* Change border color when checked */
+            }
         }

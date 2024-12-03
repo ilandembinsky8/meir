@@ -119,7 +119,9 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
       const attachmentUrls = await this.fetchAttachments(selectedItem.ID, list);
   
       const pdfAttachments = attachmentUrls.filter(url => url.toLowerCase().endsWith('.pdf'));
-  
+      const wordAttachments = attachmentUrls.filter(url => url.toLowerCase().endsWith('.docx'));
+      
+      debugger;
       this.setState({
         selectedOption,
         selectedItem: selectedItem,
@@ -130,6 +132,11 @@ export default class MeirConversationScripts extends React.Component<IMeirConver
         window.open(pdfAttachments[0], '_blank');
       } else {
         console.error('No PDF attachments found for the selected item');
+        if (wordAttachments.length > 0) {
+          window.open(wordAttachments[0], '_blank');
+        } else {
+          console.error('No WORD attachments found for the selected item');
+        }
       }
     } else {
       this.setState({
