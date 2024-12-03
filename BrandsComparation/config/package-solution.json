@@ -3,7 +3,7 @@
     "solution": {
         "name": "meir-brands-comparation-client-side-solution",
         "id": "7046018c-9e1f-4e04-998c-3da3bfd03db7",
-        "version": "1.0.0.1",
+        "version": "1.0.0.2",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "isDomainIsolated": false,

@@ -12,7 +12,8 @@ sp.setup({
   }
 });
 
-export interface IState { 
+export interface IState {
+  allModels: any[]; 
   models: any[];  // All model data
   selectedModels: any[]; // Selected models for comparison
   brandOptions: string[];
@@ -39,6 +40,7 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     super(props);
 
     this.state = { 
+      allModels: [],
       models: [],
       selectedModels: [],
       brandOptions: [],
@@ -69,6 +71,7 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       );
 
       this.setState({ models });
+      this.setState({ allModels: models, models });
 
       // Extract unique values for the filters
       const brandOptions = this.getUniqueValues(models, 'Brand.Title');
@@ -171,30 +174,33 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     }
   }
 
+  
+  
   private applyFilters() {
-    let filteredModels = [...this.state.models];
 
-    // Apply each filter based on the selected value
-    if (this.state.selectedBrand) {
-      filteredModels = filteredModels.filter(model => model.Brand && model.Brand.Title === this.state.selectedBrand);
+    const { allModels, selectedBrand, selectedEngineType, selectedSegment, selectedPriceRange } = this.state;
+  
+    let filteredModels = [...allModels];
+  
+    if (selectedBrand) {
+      filteredModels = filteredModels.filter(model => model.Brand && model.Brand.Title === selectedBrand);
     }
-
-    if (this.state.selectedEngineType) {
-      filteredModels = filteredModels.filter(model => model.EngineType && model.EngineType.Title === this.state.selectedEngineType);
+  
+    if (selectedEngineType) {
+      filteredModels = filteredModels.filter(model => model.EngineType && model.EngineType.Title === selectedEngineType);
     }
-
-    if (this.state.selectedSegment) {
-      filteredModels = filteredModels.filter(model => model.Segment && model.Segment.Title === this.state.selectedSegment);
+  
+    if (selectedSegment) {
+      filteredModels = filteredModels.filter(model => model.Segment && model.Segment.Title === selectedSegment);
     }
-
-    if (this.state.selectedPriceRange) {
-      filteredModels = filteredModels.filter(model => model.ConsumerPrice === this.state.selectedPriceRange);
+  
+    if (selectedPriceRange) {
+      filteredModels = filteredModels.filter(model => model.ConsumerPrice === selectedPriceRange);
     }
-
-    // Update the state with the filtered models
-    this.setState({ models: filteredModels });
-    this.setState({showFilters : true});
+  
+    this.setState({ models: filteredModels, showFilters: true });
   }
+  
 
   private handleFilterChange(event: React.ChangeEvent<HTMLSelectElement>, filterName: string) {
     const value = event.target.value;
