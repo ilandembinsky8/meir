@@ -1,0 +1,364 @@
+@import "~office-ui-fabric-react/dist/sass/References.scss";
+
+.knowedgeSearchBoxes {
+  .container {
+    max-width: 700px;
+    margin: 0px auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  }
+  // direction: rtl;
+
+  .row {
+    @include ms-Grid-row;
+    @include ms-fontColor-white;
+    background-color: $ms-color-themeDark;
+    padding: 20px;
+  }
+  .serachBoxAutoComplete {
+    @include ms-Grid-row;
+    @include ms-fontColor-white;
+    margin: 0px;
+  }
+  
+  .ListItemPickerSearchAuto {
+    margin-left: 10px;
+  }
+
+  .ListItemPickerSearchAuto:first-child {
+    margin-left: 0px!important;
+  }
+
+  @media only screen and (max-width: 1275px) {
+    .ListItemPickerSearchAuto:first-child {
+      margin-left: 10px!important;
+    }
+  }
+
+
+
+  // .ListItemPickerSearchAuto:first-child {
+  //   margin-left: 0px;
+  // }
+
+  
+  // Catch elment with class start with ms-BasePicker-text
+  .ListItemPickerCss div[class^="ms-BasePicker-text"] {
+    border-radius: 0px;
+    // padding: 3px;
+    padding-right: 5px;
+    
+  }
+
+  // Catch elment with id start with selected-items-
+  // .ListItemPickerCss [id^=selected-items-]
+  // {
+  //   padding: 3px;
+
+  // }
+
+  .btnSearch,
+  .btnClear {
+    float: left;
+  }
+  .btnSearchRTL {
+    float: right;
+    margin-left: 15px;
+  }
+
+  .btnClear {
+    margin-left: 15px;
+  }
+  .searchBoxTitle {
+    color: black;
+  }
+  .column {
+    @include ms-Grid-col;
+    @include ms-lg10;
+    @include ms-xl8;
+    @include ms-xlPush2;
+    @include ms-lgPush1;
+  }
+
+  .title {
+    @include ms-font-xl;
+    @include ms-fontColor-white;
+  }
+
+  .subTitle {
+    @include ms-font-l;
+    @include ms-fontColor-white;
+  }
+
+  .description {
+    @include ms-font-l;
+    @include ms-fontColor-white;
+  }
+
+  .button {
+    // Our button
+    text-decoration: none;
+    height: 32px;
+
+    // Primary Button
+    min-width: 80px;
+    background-color: $ms-color-themePrimary;
+    border-color: $ms-color-themePrimary;
+    color: $ms-color-white;
+
+    // Basic Button
+    outline: transparent;
+    position: relative;
+    font-family: "Segoe UI WestEuropean", "Segoe UI", -apple-system,
+      BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: $ms-font-size-m;
+    font-weight: $ms-font-weight-regular;
+    border-width: 0;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 16px;
+
+    .label {
+      font-weight: $ms-font-weight-semibold;
+      font-size: $ms-font-size-m;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 4px;
+      vertical-align: top;
+      display: inline-block;
+    }
+  }
+
+  .peoplePickerContainer {
+    margin-left: 10px;
+
+    p {
+      color: black;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .selUsers {
+      color: black;
+    }
+  }
+
+  // div[class="people-picker"] {
+  //   border-radius: 12px!important;
+  // }
+
+  .customStyledPicker {
+    margin-left: 10px;
+    // width: 15%;
+    min-width: 180px;
+    margin-bottom: 8px;
+  }
+
+  // mgt-people-picker > * {
+  //   border-radius: 12px;
+
+  // }
+
+  mgt-people-picker {
+    /* OR individual input border sides */
+    --input-border-bottom: 0;
+    --input-border-right: 0;
+    --input-border-left: 0;
+    
+    --input-border-top: 0;
+
+    // --input-background-color: #1f1f1f; /* input area background color */
+    // --input-border-color--hover: #008394; /* input area border hover color */
+    // --input-border-color--focus: #0f78d4; /* input area border focus color */
+
+    // --dropdown-background-color: white; /* selection area background color */
+    // --dropdown-item-hover-background: #85abd1; /* person background color on hover */
+
+    --selected-person-background-color: #f1f1f1; /* person item background color */
+
+    // --color: white; /* input area border focus color */
+    // --placeholder-color: #f1f1f1; /* placeholder text color */
+    // --placeholder-color--focus: rgba(255, 255, 255, 0.8); /* placeholder text focus color */
+  }
+
+  // Select 4 level search box use only meuhedet
+  div[class="Select-control"] {
+    // width: 22%;
+    // width: 30%;
+    // float: right;
+    margin-left: 10px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    
+  }
+
+  // [title~=flower]
+  div[class~="Select--single"] {
+    float: right;
+    width: 30%;
+    margin-left: 10px;
+  }
+
+  div[class="flyout"] {
+    display: none;
+  }
+  // input[class="knPersonField"] {
+
+  //   color: red;
+  // }
+
+  
+}
+
+.KNRequriedField{
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+  display: none;  
+}
+
+
+
+// ******************************************** //
+
+// Select 4 level search box use only meuhedet
+div[class="Select-control"] {
+  border-radius: 12px;
+  height: 46px;
+}
+
+div[class="Select-input"] > input {
+  padding: 0px !important;
+  line-height: 46px;
+}
+div[class~="Select-value"],
+div[class~="Select-placeholder"] {
+  line-height: 46px !important;
+}
+
+div[class~="Select-placeholder"],
+div[class~="Select-value"] span {
+  color: #0064a7 !important;
+  font-family: fbt-Regular;
+  font-size: 1.1rem;
+}
+div[class~="Select--single"] {
+  border-radius: 12px;
+}
+.oneGisFilter {
+  float: right;
+  width: 15%;
+  // height: 46px;
+  // background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 12px;
+  margin-left: 2%;
+  // padding: 5px;
+  margin-bottom: 10px;
+}
+
+.oneBigGisFilter {
+  float: right;
+  width: 32%;
+  // height: 46px;
+  // background: #FFFFFF 0% 0% no-repeat padding-box;
+  border-radius: 12px;
+  margin-left: 2%;
+  // padding: 5px
+}
+
+
+// *************** SerchBox style ****** 
+// div[class^="knowedgeSearchBoxes"] {
+//   float: right;
+//   width: 100%;
+//   height: 200px;
+//   background: transparent linear-gradient(180deg, #0064a7 0%, #028ed1 100%) 0%
+//     0% no-repeat padding-box;
+//   border-radius: 12px;
+//   padding: 30px;
+// }
+
+// div[class^="ListItemPicker"] {
+//   background-color: white;
+// }
+
+div[class^="ListItemPickerSearchAuto"] {
+  // margin-bottom: 8px;
+  // border-radius: 12px;
+  // // width: 22%;
+  // width: 15%;
+}
+
+// div[class^="ms-BasePicker-text"]::after,
+// div[class^="ms-BasePicker-text"] {
+//   border: 0px !important;
+// }
+
+// input[class^="ms-BasePicker-input"] {
+//   font-size: 1.1rem;
+// }
+
+
+// button[id="KNbtnSearch"],button[id="KNbtnClear"] {
+//   height: 46px;
+//   border-radius: 12px;
+//   color: #fff;
+//   font-size: 1.2rem;
+//   font-family: fbt-Regular;
+//   border: none;
+// }
+
+// div[class^=ms-BasePicker-text] span{
+//   font-size: 1.2rem;
+//   font-family: fbt-Regular;
+//   color: #0064a7!important;
+//   background-color: transparent;
+// }
+// div[class^=ms-BasePicker-text] div,div[class^=ms-BasePicker-text] button{
+//   background-color: transparent!important;
+// }
+
+
+// button[id="KNbtnSearch"],button[id="KNbtnSearch"]:hover{
+//   background:transparent linear-gradient(180deg,#fcb713,#f47421) 0 0 no-repeat padding-box;
+//   border: none;
+// }
+
+// button[id="KNbtnSearch"] span,button[id="KNbtnClear"] span{
+//   font-weight: normal;
+// }
+// button[id="KNbtnClear"],button[id="KNbtnClear"]:hover {
+//   background:#028ed1 0 0 no-repeat padding-box;
+//   border: none;
+// }
+// input[class^=ms-BasePicker-input]::placeholder{
+//   color: #0064a7;
+// }
+// input[class^=ms-BasePicker-input]{
+//     font-family: 'fbt-Regular';
+//     color: #0064a7;
+// }
+// div[class^=knowedgeSearchBoxes]{
+//   min-height: 122px;
+//   height: 100%;
+// }
+// div[class^=ListItemPickerSearchAuto],input[class^=ms-BasePicker-input],
+// div[class^=ms-BasePicker-text], div[class^=ms-BasePicker-text]:after{
+//   height: 46px;
+// }
+// div[id^=knowedgeSearchBoxesButtons]{
+//   margin-top: 0px!important;
+//   // width: 22%!important;
+//   width: 18%!important;
+// }
+
+
+
+div[class*="KnowedgeTextFieldId"] div[class*="ms-TextField-fieldGroup"]{
+  
+  margin-left: 10px;
+}
+ 
+
+
+// ***********END ******* SerchBox style ********
