@@ -3,7 +3,7 @@
     "solution": {
         "name": "meir-hp-client-side-solution",
         "id": "477760ae-267a-466a-bd33-14afbfb1a39e",
-        "version": "1.0.0.2",
+        "version": "1.0.0.3",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "isDomainIsolated": false,
