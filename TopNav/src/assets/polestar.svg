@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="243" height="183" viewBox="0 0 243 183">
+  <g id="Group_5326" data-name="Group 5326" transform="translate(-705 -942)">
+    <rect id="Rectangle_3891" data-name="Rectangle 3891" width="243" height="183" rx="5" transform="translate(705 942)" fill="#fff"/>
+    <g id="polestar" transform="translate(765.297 971.461)">
+      <path id="Path_52943" data-name="Path 52943" d="M60.27,60.681V3.008L62.443.29l9.81,48.434,48.387,9.784-2.173,2.173Zm-.543,2.175V120.53l-1.63,2.718L47.773,74.813-.1,65.03l2.173-2.173Z" transform="translate(0.1 -0.29)"/>
+      <path id="Path_52944" data-name="Path 52944" d="M60.27,327.147h58.2l2.173-2.173L72.253,315.19Zm-.543,2.175H2.073L-.1,331.5l47.873,9.784Z" transform="translate(0.1 -266.756)" fill="#53565a"/>
+    </g>
+  </g>
+</svg>

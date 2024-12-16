@@ -3,7 +3,7 @@
     <ClientSideComponentInstance
         Title="MeirTopNav"
         Location="ClientSideExtension.ApplicationCustomizer"
-        ComponentId="5ffda730-f3d0-4f1a-889b-4c9eae2ffe5a"
+        ComponentId="f5e432ec-a9cd-4648-a585-a0f67e200fb7"
         Properties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
     </ClientSideComponentInstance>
 </Elements>

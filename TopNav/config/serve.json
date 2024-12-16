@@ -4,9 +4,9 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://{tenantDomain}/SitePages/myPage.aspx",
+      "pageUrl": "https://meir365.sharepoint.com/sites/KBMCT2/",
       "customActions": {
-        "5ffda730-f3d0-4f1a-889b-4c9eae2ffe5a": {
+        "f5e432ec-a9cd-4648-a585-a0f67e200fb7": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
             "testMessage": "Test message"
@@ -15,9 +15,9 @@
       }
     },
     "meirTopNav": {
-      "pageUrl": "https://{tenantDomain}/SitePages/myPage.aspx",
+      "pageUrl": "https://meir365.sharepoint.com/sites/KBMCT2/",
       "customActions": {
-        "5ffda730-f3d0-4f1a-889b-4c9eae2ffe5a": {
+        "f5e432ec-a9cd-4648-a585-a0f67e200fb7": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
             "testMessage": "Test message"

@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "meir-top-nav-client-side-solution",
-    "id": "6135dc00-3337-4d73-9024-6fa3f40b627f",
-    "version": "1.0.0.0",
+    "id": "48905032-1cb8-47d8-83d4-026a3b9c94b2",
+    "version": "1.0.0.17",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -12,7 +12,7 @@
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.18.0"
+      "mpnId": "Undefined-1.17.4"
     },
     "metadata": {
       "shortDescription": {
@@ -29,7 +29,7 @@
       {
         "title": "Application Extension - Deployment of custom action",
         "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "a026cdbb-5ce6-4c3b-9523-e529f4733311",
+        "id": "17232265-741a-42e3-85a1-264cb6b7ea5f",
         "version": "1.0.0.0",
         "assets": {
           "elementManifests": [
