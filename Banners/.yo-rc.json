@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "14.21.3",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "version": "1.16.0-rc.0",
+    "libraryName": "meir-banners",
+    "libraryId": "448a2b48-bdb8-4695-8ff5-46cbe542401e",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "Meir-Banners",
+    "solutionShortDescription": "Meir-Banners description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
