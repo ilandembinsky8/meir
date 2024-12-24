@@ -3,7 +3,7 @@
   "solution": {
     "name": "meir-banners-client-side-solution",
     "id": "448a2b48-bdb8-4695-8ff5-46cbe542401e",
-    "version": "1.0.0.0",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

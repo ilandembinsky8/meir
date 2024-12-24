@@ -1,41 +1,95 @@
 import * as React from 'react';
 import styles from './MeirBanners.module.scss';
 import { IMeirBannersProps } from './IMeirBannersProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { sp } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
+import "@pnp/sp/items";
 
-export default class MeirBanners extends React.Component<IMeirBannersProps, {}> {
+sp.setup({
+  sp: {
+    baseUrl: "https://meir365.sharepoint.com/sites/KBMCT2"
+  }
+});
+
+export interface IState {
+  itemID: number;
+  bannerLink: string;
+  itemName: string;
+}
+
+export default class MeirBanners extends React.Component<IMeirBannersProps, IState> {
+
+  constructor(props: IMeirBannersProps) {
+    super(props);
+    this.state = { itemID: 1, bannerLink: "", itemName: "" };  
+  }
+
+  componentDidMount() {
+    this.GetBrandBanner(); 
+  }
+
+  private GetQueryString(value: string): string {
+    let valString = "";
+
+    let valStringArr = window.location.href.split("?");
+    if (valStringArr[1]) valString = valStringArr[1];
+    else return "";
+
+    valStringArr = valString.split(value + "=");
+    if (valStringArr[1]) valString = valStringArr[1];
+    else return "";
+
+    valStringArr = valString.split("&");
+    if (valStringArr[0]) {
+      return decodeURI(valStringArr[0]);
+    } else {
+      return decodeURI(valString);
+    }
+  }
+ 
+  private async GetBrandBanner() {
+    var itemID = Number(this.GetQueryString("BrandID"));
+    var itemName = this.GetQueryString("Brand");
+    this.setState({itemName});
+    if(!itemID)
+      return;
+    try {
+      const item = await sp.web.lists.getByTitle("מותגים").items.getById(itemID).select("Banner")();
+
+      debugger;
+      const bannerField = item?.Banner;
+      if (bannerField && bannerField.Url) {
+        this.setState({ bannerLink: bannerField.Url });
+      } else {
+        this.setState({ bannerLink: "" });  
+      }
+    } catch (error) {
+      console.error("Error fetching Banner by ID:", error);
+      this.setState({ bannerLink: "" });  
+    }
+  }
+
   public render(): React.ReactElement<IMeirBannersProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
-
     return (
-      <section className={`${styles.meirBanners} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
+      <section className={styles.meirBanners}>
+        <div style={{fontSize: 26, fontWeight: "bold"}}>{this.state.itemName}</div>
         <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
+          {this.state.bannerLink ? (
+            <div
+              style={{
+                width: "100%",
+                height: "auto", 
+                minHeight: "300px", 
+                backgroundImage: `url(${this.state.bannerLink})`,
+                backgroundSize: "cover", 
+                backgroundPosition: "center", 
+                backgroundRepeat: "no-repeat", 
+              }}
+            ></div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </section>
     );
