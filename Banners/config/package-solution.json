@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "meir-banners-client-side-solution",
+    "id": "448a2b48-bdb8-4695-8ff5-46cbe542401e",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.16.0-rc.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Meir-Banners description"
+      },
+      "longDescription": {
+        "default": "Meir-Banners description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "meir-banners Feature",
+        "description": "The feature that activates elements of the meir-banners solution.",
+        "id": "4aa321a8-2699-4de6-86f6-bed2f65a4b73",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/meir-banners.sppkg"
+  }
+}

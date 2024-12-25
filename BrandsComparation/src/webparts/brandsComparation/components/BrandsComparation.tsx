@@ -62,8 +62,8 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     try {
       const models = await this.GetItems(
         "דגמים",
-        "ID,Title,ModelCode,ConsumerPrice,SafetyLevel,ManufacturingCountry/Title,Brand/Title,Segment/Title,EngineType/Title,DrivingRange,AvrgFuelUsage,Power", 
-        "ManufacturingCountry,Brand,Segment,EngineType",
+        "ID,Title,ModelCode,ConsumerPrice,SafetyLevel,ManufacturingCountry/Title,Brand/Title,PriceRange/Title,Segment/Title,EngineType/Title,DrivingRange,AvrgFuelUsage,Power", 
+        "ManufacturingCountry,Brand,Segment,EngineType,PriceRange",
         "Title",
         false, 
         null,  
@@ -77,7 +77,7 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
       const brandOptions = this.getUniqueValues(models, 'Brand.Title');
       const engineTypeOptions = this.getUniqueValues(models, 'EngineType.Title');
       const segmentOptions = this.getUniqueValues(models, 'Segment.Title');
-      const priceRangeOptions = this.getUniqueValues(models, 'ConsumerPrice');
+      const priceRangeOptions = this.getUniqueValues(models, 'PriceRange.Title');
 
       // Set the unique filter options in state
       this.setState({
@@ -195,7 +195,7 @@ export default class BrandsComparation extends React.Component<IBrandsComparatio
     }
   
     if (selectedPriceRange) {
-      filteredModels = filteredModels.filter(model => model.ConsumerPrice === selectedPriceRange);
+      filteredModels = filteredModels.filter(model => model.PriceRange.Title === selectedPriceRange);
     }
   
     this.setState({ models: filteredModels, showFilters: true });

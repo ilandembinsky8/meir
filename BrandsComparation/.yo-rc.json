@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "14.17.4",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "version": "1.16.0-rc.0",
+    "libraryName": "meir-brands-comparation",
+    "libraryId": "7046018c-9e1f-4e04-998c-3da3bfd03db7",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "Meir-BrandsComparation",
+    "solutionShortDescription": "Meir-BrandsComparation description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
