@@ -48,6 +48,7 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
       brands: {},
       brandsType: {},
       isUpdated: "",
+      searchValue: "",
     };
     this._handleSearchKeyDown = this._handleSearchKeyDown.bind(this);
     this._handleSearchClick = this._handleSearchClick.bind(this);
@@ -65,20 +66,28 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
     //'ilande@mct.co.il'
     this._sp = getSP();
     //this._getMainNav();
-    this._createModelList();
-    this._createModelBrandList();
-    this._readAttachments('מותגים','דגמים');
-    this._getSearches('חיפושים עבור משתמש');
-    this._readLinksFromList();
+    
+    
     //this._readFromLibrary(_bigMenuLibraryTitle);
     this._OpenMenu = this._OpenMenu.bind(this);
     //this._OpenCloseLinks = this._OpenCloseLinks.bind(this);
     this._openCloseBigMenu = this._openCloseBigMenu.bind(this);
     //this._OpenLinks = this._OpenLinks.bind(this);
     //this._CloseLinks = this._CloseLinks.bind(this);
+    const _suiteNav = document.getElementById("SuiteNavPlaceholder")
+    _suiteNav?.addEventListener("mouseenter", this._CloseMenu);
   }
 
   async componentDidMount() {
+    
+    const _suiteNav = document.getElementById("SuiteNavPlaceholder")
+    _suiteNav?.addEventListener("mouseenter", this._CloseMenu);
+    //debugger;
+    this._createModelList();
+    this._createModelBrandList();
+    this._readAttachments('מותגים','דגמים');
+    this._getSearches('חיפושים עבור משתמש');
+    this._readLinksFromList();
     // const navLocalStorageControlItems =      await this.getNavLocalStorageControlItems();
     // if (!navLocalStorageControlItems.length) return;
     // // this.setState({ LocalStorageNavItems: navLocalStorageControlItems });
@@ -194,106 +203,106 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
     }
   }
 
-  private _UpdateSearches = async (listName: string): Promise<void> => {
-    //debugger;
-    const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-    const value: any = searchInput?.value;
+  private _UpdateSearches = async (listName: string, value: string): Promise<void> => {
+    // debugger;
+    // //const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+    // //const value: any = searchInput?.value;
 
-    // update searches state for the user
-    const searches:   { [key: string]: any[] } = {};
-    const sortedKeys = Object.keys(this.state.searches).sort((a, b) => parseInt(a) - parseInt(b));
-    let searchExists = false;
-    let searchKey = -1;
-    let maxKey = -1;
-    for (let key in this.state.searches) {
-      if (parseInt(key) > maxKey) {
-        maxKey = parseInt(key);
-      }
-      if (this.state.searches[key] === value) {
-        searchExists = true;
-        searchKey = parseInt(key);
-      }
-    }
-    if (!searchExists) {
-      if (maxKey > 4) {
-        searches[1] = value;
-        for (let i = 2; i < 5; i++) {
-          searches[i] = this.state.searches[sortedKeys[i]];
-        }
-      } else {
-        searches[1] = value;
-        for (let i = 1; i < sortedKeys.length; i++) {
-          searches[i+1] = this.state.searches[sortedKeys[i]];
-        }
-      }
-    } else {
-      if (this.state.searches[1] !== value)
-      {
-        for (let i = 0; i < sortedKeys.length; i++) {
-          searches[i+1] = this.state.searches[sortedKeys[i]];
-        }
-        let temp = searches[1];
-        searches[1] = value;
-        searches[searchKey] = temp;
-      } else {
-        for (let i = 0; i < sortedKeys.length; i++) {
-          searches[i+1] = this.state.searches[sortedKeys[i]];
-        }
-      }
-    }
+    // // update searches state for the user
+    // const searches:   { [key: string]: any[] } = {};
+    // const sortedKeys = Object.keys(this.state.searches).sort((a, b) => parseInt(a) - parseInt(b));
+    // let searchExists = false;
+    // let searchKey = -1;
+    // let maxKey = -1;
+    // for (let key in this.state.searches) {
+    //   if (parseInt(key) > maxKey) {
+    //     maxKey = parseInt(key);
+    //   }
+    //   if (this.state.searches[key].toString() === value) {
+    //     searchExists = true;
+    //     searchKey = parseInt(key);
+    //   }
+    // }
+    // if (!searchExists) {
+    //   if (maxKey > 4) {
+    //     searches[1] = value;
+    //     for (let i = 2; i < 5; i++) {
+    //       searches[i] = this.state.searches[sortedKeys[i]];
+    //     }
+    //   } else {
+    //     searches[1] = value;
+    //     for (let i = 1; i < sortedKeys.length; i++) {
+    //       searches[i+1] = this.state.searches[sortedKeys[i]];
+    //     }
+    //   }
+    // } else {
+    //   if (this.state.searches[1] !== value)
+    //   {
+    //     for (let i = 0; i < sortedKeys.length; i++) {
+    //       searches[i+1] = this.state.searches[sortedKeys[i]];
+    //     }
+    //     let temp = searches[1];
+    //     searches[1] = value;
+    //     searches[searchKey] = temp;
+    //   } else {
+    //     for (let i = 0; i < sortedKeys.length; i++) {
+    //       searches[i+1] = this.state.searches[sortedKeys[i]];
+    //     }
+    //   }
+    // }
 
-    this.setState({ searches });
+    // this.setState({ searches });
 
-    // delete all searches for the user
-    try {
-      const spCache = spfi(this._sp).using(Caching({ store: "session" }));
+    // // delete all searches for the user
+    // try {
+    //   const spCache = spfi(this._sp).using(Caching({ store: "session" }));
       
-      // const listContent: any[] = await spCache.web.lists
-      //   .getByTitle(listName)
-      //   .items
-      //   .select("Id", "Title", "AuthorId", "SearchType", "EntriesNumber")();
+    //   // const listContent: any[] = await spCache.web.lists
+    //   //   .getByTitle(listName)
+    //   //   .items
+    //   //   .select("Id", "Title", "AuthorId", "SearchType", "EntriesNumber")();
 
-      const items = await spCache.web.lists
-      .getByTitle(listName)
-      .items.filter(`AuthorId eq ${this._loginId}`)
-      .select("Id")();
+    //   const items = await spCache.web.lists
+    //   .getByTitle(listName)
+    //   .items.filter(`AuthorId eq ${this._loginId}`)
+    //   .select("Id")();
 
-      //const list = await spCache.web.lists.getByTitle(listName).items();
-      //const _entityTypeName = list.EntityTypeName;
-      //debugger;
-      // for (let item of listContent) {
-      //   if (item.AuthorId === this._loginId) {
-      //     await spCache.web.lists.getByTitle(listName).items.getById(item.Id).delete();
-      //   }
-      // }
+    //   //const list = await spCache.web.lists.getByTitle(listName).items();
+    //   //const _entityTypeName = list.EntityTypeName;
+    //   //debugger;
+    //   // for (let item of listContent) {
+    //   //   if (item.AuthorId === this._loginId) {
+    //   //     await spCache.web.lists.getByTitle(listName).items.getById(item.Id).delete();
+    //   //   }
+    //   // }
 
-      // Iterate through the items and delete them
-      for (const item of items) {
-        await spCache.web.lists.getByTitle(listName).items.getById(item.Id).delete();
-        console.log(`Deleted item with ID: ${item.Id}`);
-      }
+    //   // Iterate through the items and delete them
+    //   for (const item of items) {
+    //     await spCache.web.lists.getByTitle(listName).items.getById(item.Id).delete();
+    //     console.log(`Deleted item with ID: ${item.Id}`);
+    //   }
 
-    } catch (err) {
-      //debugger;
-      console.log(err);
-      //Logger.write(`${this.LOG_SOURCE} (_readAllFilesSize) - ${JSON.stringify(err)} - `, LogLevel.Error);
-    }
+    // } catch (err) {
+    //   //debugger;
+    //   console.log(err);
+    //   //Logger.write(`${this.LOG_SOURCE} (_readAllFilesSize) - ${JSON.stringify(err)} - `, LogLevel.Error);
+    // }
 
-    // create new searches for the user
-    try {
-      const spCache = spfi(this._sp).using(Caching({ store: "session" }));
+    // // create new searches for the user
+    // try {
+    //   const spCache = spfi(this._sp).using(Caching({ store: "session" }));
       
-      for (let key in searches) {
-        await spCache.web.lists.getByTitle(listName).items.add({
-          Title: searches[key],
-          AuthorId: this._loginId,
-          SearchType: "User",
-          EntriesNumber: key,
-        });
-      }
-    } catch (err) {
-      //Logger.write(`${this.LOG_SOURCE} (_readAllFilesSize) - ${JSON.stringify(err)} - `, LogLevel.Error);
-    }
+    //   for (let key in searches) {
+    //     await spCache.web.lists.getByTitle(listName).items.add({
+    //       Title: searches[key],
+    //       AuthorId: this._loginId,
+    //       SearchType: "User",
+    //       EntriesNumber: key,
+    //     });
+    //   }
+    // } catch (err) {
+    //   //Logger.write(`${this.LOG_SOURCE} (_readAllFilesSize) - ${JSON.stringify(err)} - `, LogLevel.Error);
+    // }
   }
 
   private _createModelList = async (): Promise<void> => {
@@ -569,14 +578,14 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
           //if (_Items[i].HtmlId === id) {
             if ('m' + _Items[i].Id === id) {
               if (_Items[i].Title === 'תסריטי שיחה') {
-                debugger;//////////////////////////////////////////////////////////////////
+                //debugger;//////////////////////////////////////////////////////////////////
                 const _ScriptsKeys:string[] = Object.keys(_Scripts);
                 let s = "";
                 
                 if (_ScriptsKeys !== null && _ScriptsKeys !== undefined && _ScriptsKeys.length > 0) {
                 for (let j = 0; j < _ScriptsKeys.length; j++) {
                     if (_Scripts[_ScriptsKeys[j]] !== null){
-                      s = s + "<a href='"+ _Scripts[_ScriptsKeys[j]][0].ServerRelativeUrl +"?web=1' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _ScriptsKeys[j] + "</div>"
+                      s = s + "<a href='"+ _Scripts[_ScriptsKeys[j]][0].ServerRelativeUrl +"?web=1' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _ScriptsKeys[j] + "</a>"
                     } else {
                       //s = s + "<div style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _Items[i].Children[j].Title + "</div>"
                     }     
@@ -645,11 +654,21 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
     private _handleSearchKeyDown(event: React.ChangeEvent<HTMLInputElement>) {
       //if (event.code !== 'Enter' && event.code !== 'NumpadEnter') {
         //this._UpdateSearches('חיפושים עבור משתמש');
+        //debugger;
         const modelsAndBrandsType:   { [key: string]: any[] } = {};
-        const brandsType:   { [key: string]: any[] } = {};
-        //const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-        //const value: any = searchInput?.value;
-        //alert(event.target.value);
+        let brandsType:   { [key: string]: any[] } = {};
+        // if (Object.keys(brandsType).length === 0) {
+        //   brandsType = this.state.brands;
+        // }
+        // //const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        // //const value: any = searchInput?.value;
+        // //alert(event.target.value);
+        // this.setState({ brandsType });
+
+        let searchValue:string = event.target.value;
+        this.setState({ searchValue });
+
+
         for (let key in this.state.modelsAndBrands) {
           if (key.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
             modelsAndBrandsType[key] = this.state.modelsAndBrands[key];
@@ -663,13 +682,15 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
             brandsType[key] = this.state.brands[key];
           }
         }
-        
+
         this.setState({ brandsType });
+        
         let isUpdated:string = this.state.isUpdated;
          isUpdated += "1";
          if (isUpdated.length > 10) {isUpdated = "1";}
          this.setState ({isUpdated});
-        this._OpenSearchesMenuType();
+        //this._OpenSearchesMenuType();
+
       //} else {
         // const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         // const value: any = searchInput?.value;
@@ -704,16 +725,16 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
         //  }
 
           const _searches = this.state.searches;
-          let s = "";
+          // let s = "";
           
-          for (let _key in _searches) {
-            if (_searches[_key] != null) {
-              let s_href = _searches[_key].toString();
-              s = s + "<a href='"+ s_href +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _searches[_key] + "</div>"
-            }
-          }
+          // for (let _key in _searches) {
+          //   if (_searches[_key] != null) {
+          //     let s_href = _searches[_key].toString();
+          //     s = s + "<a href='"+ s_href +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _searches[_key] + "</a>"
+          //   }
+          // }
             if (searchesMenu !== null && searchesMenu !== undefined) {
-            searchesMenu.innerHTML = s;
+            //searchesMenu.innerHTML = s;
           //submenu.style.left = y + "px";
           searchesMenu.style.display = "inline";
           }
@@ -750,17 +771,18 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
        let s = "";
        for (let _key in _brandsType) {
         if (_brandsType[_key] != null) {
-          s = s + "<a href='"+ _brandsType[_key] +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _key + "</div>"
+          //debugger;///////////////////////////////////
+          s = s + "<a href='"+ _brandsType[_key].link +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _key + "</a>"
         }
         }
       
        for (let _key in _brandsAndModelsType) {
        if (_brandsAndModelsType[_key] != null) {
-         s = s + "<a href='"+ _brandsAndModelsType[_key] +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _key + "</div>"
+         s = s + "<a href='"+ _brandsAndModelsType[_key] +"' target='_blank' style='float:left;width:100%;height:40px;border-bottom:1px solid #D2D8DF'>" + _key + "</a>"
        }
        }
         if (searchesMenu !== null && searchesMenu !== undefined) {
-         searchesMenu.innerHTML = s;
+         //searchesMenu.innerHTML = s;
          let isUpdated:string = this.state.isUpdated;
          isUpdated += "1";
          if (isUpdated.length > 10) {isUpdated = "1";}
@@ -850,9 +872,38 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
     const _openCloseBigMenuMethod = this._openCloseBigMenu;
     const _href = document.location.href;
     const _showQuickLinks = ((_href.indexOf('SitePages') > 0 && _href.indexOf('Form') < 0) || _href === this._currentWebUrl || _href === this._currentWebUrl+'/') ? 'block' : 'none';
+    //this._createModelList();
+    const _searchValue = this.state.searchValue;
+    const _brands = this.state.brands;
+    const _brandsKeys = Object.keys(_brands);
+    const _brandsType = this.state.brandsType;
+    let _brandsTypeKeys = Object.keys(_brandsType);
+    if (_brandsTypeKeys.length === 0 && _searchValue.length === 0) {
+      _brandsTypeKeys = _brandsKeys;
+    }
+    const _modelsAndBrands = this.state.modelsAndBrands;
+    const _modelsKeys = Object.keys(_modelsAndBrands);
+    const _modelsType = this.state.modelsAndBrandsType;
+    let _modelsTypeKeys = Object.keys(_modelsType);
+    if (_modelsTypeKeys.length === 0 && _searchValue.length === 0) {
+      _modelsTypeKeys = _modelsKeys;
+    }
+    const _searches = this.state.searches;
+    const _searchesKeys = Object.keys(_searches);
+    const _searchValues:{[key: string]: any;} = {};
+    for (let i = 0; i < Object.keys(_searches).length; i++) {
+      //alert(_modelsAndBrands[_searches[Object.keys(_searches)[i]].toString()]);
+      let _key:string =_searches[Object.keys(_searches)[i]].toString();
+      let _value = _modelsAndBrands[_key]
+      //alert('<<<'+_key + '---' + _value + '>>>');
+      _searchValues[_key] = _value;
+    }
+    
+    debugger;
     return (
     
     <div>
+      
       <section className={styles.theMenu}>
       <div className={styles.logoArea}>
         <div className={styles.r100}>
@@ -892,11 +943,35 @@ export class TopMenu extends React.Component<  ITopMenuProps,ITopMenuState,{}> {
             <div className={styles.inner}>
                 <div className={styles.magnify} onClick={()=>this._handleSearchClick()}></div>
                 <div className={styles.input} onChange={this._handleSearchKeyDown} onClick={()=>this._OpenSearchesMenu()}>
-                    <input id="searchInput" type="text" />
+                    <input id="searchInput" type="text" autoComplete="off"/>
                 </div>
             </div>
             <div id="searchesMenu" className={styles.searchesMenu} onClick={()=>this._OpenSearchesMenu()} onMouseLeave={()=>this._CloseSearchesMenu()}>
-              isUpdated: {this.state.isUpdated}
+            <div>
+  <div>
+    {/* <p>isUpdated: {this.state.isUpdated}</p> */}
+    {/* <div>
+      {_brandsKeys.map((item, index) => (
+        <a href={_brands[item].link} className={styles.searchItem} key={index}>{item}</a>
+        // Uncomment and fix the link if needed
+        // <a href={_brands[item]} className={styles.searchItem} target='_blank'>leelee{item}</a>
+      ))}
+    </div> */}
+      {_searchValue.length === 0 ? (
+        <div>{_searchesKeys.map((item, index) => (
+        <a href={_searchValues[_searches[item].toString()]} className={styles.searchItem} key={index}>{_searches[item]}</a>
+      ))}</div>
+      ) : (
+        <div>{_brandsTypeKeys.map((item, index) => (
+        <a href={_brands[item].link} className={styles.searchItem} key={index}>{item}</a>
+      ))}
+      {_modelsTypeKeys.filter((item,index)=>(item != null && index != null && item != 'null')).map((item, index) => (
+        <a href={_modelsAndBrands[item].toString()} className={styles.searchItem} key={index}>{item}</a>
+      ))}</div>
+      )}
+    {/* <p>isUpdated2: {this.state.isUpdated}</p> */}
+  </div>
+</div> 
             </div>
         </div>
     </section>

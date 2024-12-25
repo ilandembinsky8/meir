@@ -11,5 +11,6 @@ export interface ITopMenuState {
     brands: { [key: string]: any; };
     brandsType: { [key: string]: any; };
     isUpdated: string;
+    searchValue: string;
   }
   

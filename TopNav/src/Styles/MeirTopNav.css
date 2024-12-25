@@ -105,6 +105,13 @@ body {
     z-index: 1000;
 }
 
+.searchItem {
+    float:left;
+    width:100%;
+    height:40px;
+    border-bottom:1px solid #D2D8DF;
+}
+
 .menuItems {
     float: right;
     width: 60%;
@@ -132,7 +139,7 @@ body {
     .menuItems .item {
         float: right;
         width: 14.25%;
-        height: 100%;
+        height: 89px;
         border-right: 1px solid #AAAAAA;
         padding-top: 30px;
         cursor: pointer
@@ -141,7 +148,7 @@ body {
     .menuItems .arrow {
         background-image: url('../assets/arrow_down_white.svg');
         background-repeat: no-repeat;
-        background-position: 5% 80%;
+        background-position: 5% 50%;
     }
 
 .searchArea {
